@@ -19,6 +19,7 @@ import ConfirmOrder from "./screens/ConfirmOrderScreen";
 import LoginScreen from "./screens/LoginScreen";
 import Notification from "./screens/NotificationScreen";
 import PushNotification from "./screens/PushNotification";
+import SearchCar from "./screens/SearchScreen";
 import SignupScreen from "./screens/SignupScreen";
 import Support from "./screens/SupportScreen";
 import TermAndCondition from "./screens/TermAndConditionScreen";
@@ -144,6 +145,11 @@ export default function App() {
               <Stack.Screen
                 name="PushNotification"
                 component={PushNotification}
+                options={{ header: () => null }}
+              />
+              <Stack.Screen
+                name="SearchCar"
+                component={SearchCar}
                 options={{ header: () => null }}
               />
             </Stack.Navigator>

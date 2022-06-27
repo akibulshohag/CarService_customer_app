@@ -136,7 +136,7 @@ export default function HomeScreen() {
             >
               <TouchableOpacity
                 style={styles.loginBtn}
-                // onPress={() => loginWithPass()}
+                onPress={() => navigation.navigate("SearchCar")}
               >
                 {loading ? (
                   <ActivityIndicator size={"small"} color="#fff" />
