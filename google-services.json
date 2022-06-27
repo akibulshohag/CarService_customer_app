@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "996804051626",
+    "project_id": "carserviceapp-2936c",
+    "storage_bucket": "carserviceapp-2936c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996804051626:android:ef8498d8419f71a3cec6d3",
+        "android_client_info": {
+          "package_name": "com.akibul021.airport_carservice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "996804051626-qvebprp30m3b04gi236kful7bavkoha5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAI6egGW3pAafgySF8G0SzhLFEpkvgxfbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996804051626-qvebprp30m3b04gi236kful7bavkoha5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
