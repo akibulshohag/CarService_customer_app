@@ -22,6 +22,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 
 //components
+import ReviewModal from "../components/ReviewModal";
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
@@ -31,6 +32,7 @@ export default function HomeScreen(props: any) {
   const scheme = useColorScheme();
 
   const [loading, setloading] = useState(false);
+  const [ModalOpen, setModalOpen] = useState(false);
 
   const phoneCall = () => {
     Linking.openURL(`tel: 01867473587`);
@@ -140,6 +142,13 @@ export default function HomeScreen(props: any) {
                 <Text style={{ fontSize: 17, color: "#004C3F" }}>
                   Insured During The Rental Period
                 </Text>
+                <TouchableOpacity onPress={() => setModalOpen(true)}>
+                  <Text
+                    style={{ fontSize: 17, color: "#004C3F", marginTop: 5 }}
+                  >
+                    Drop Tour Review
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View>
                 <Text
@@ -295,6 +304,9 @@ export default function HomeScreen(props: any) {
           </View>
         </View>
       </ScrollView>
+      {ModalOpen ? (
+        <ReviewModal setModalOpen={setModalOpen} ModalOpen={ModalOpen} />
+      ) : null}
     </SafeAreaView>
   );
 }

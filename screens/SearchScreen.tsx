@@ -98,7 +98,7 @@ export default function UpdateProfile() {
     setcarSeat(district[index]?.toDis);
   };
 
-  console.log("............children", carSeat);
+  // console.log("............children", carSeat);
 
   //   console.log("............", selectedDistrict);
 

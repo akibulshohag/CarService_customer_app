@@ -41,6 +41,7 @@ export default function SignUpScreen() {
   const [hidePass, setHidePass] = useState(true);
   const [hideConfirmPass, sethideConfirmPass] = useState(true);
   const [img, setimg] = useState("");
+  const [image, setimage] = useState("");
   const [emailValidError, setEmailValidError] = useState("");
   const [passwordValidError, setpasswordValidError] = useState("");
 
@@ -94,7 +95,9 @@ export default function SignUpScreen() {
           alert(`Image size must be smaller than 3MB!`);
           setimg("");
         } else {
-          setimg(result.base64);
+          const file = `[data:image/jpeg;base64,${result.base64}]`;
+          setimg(file);
+          setimage(result.base64);
         }
       }
 
@@ -129,13 +132,13 @@ export default function SignUpScreen() {
         phone: phone,
         email: email,
         password: passWord,
-        avatar: img,
+        avatar: [img],
       };
       // console.log("...........dataedrsss", data);
       setloading(true);
       try {
         let res = await RegisterService.signUp(data);
-        console.log("............", res);
+        // console.log("............", res);
 
         if (res?.status === 200) {
           showMessage({
@@ -285,7 +288,7 @@ export default function SignUpScreen() {
                     <View>
                       <Image
                         style={styles.img1}
-                        source={{ uri: `data:image/jpg;base64,${img}` }}
+                        source={{ uri: `data:image/jpg;base64,${image}` }}
                       />
                     </View>
                     <TouchableOpacity

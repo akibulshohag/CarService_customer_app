@@ -114,12 +114,12 @@ export default function LoginScreen() {
       device_token: expoPushToken,
     };
 
-    console.log("...........data", data);
+    // console.log("...........data", data);
 
     if (passWord.length >= 8 && reg.test(email)) {
       try {
         let res = await RegisterService.loginWithPassword(data);
-        console.log(".........", res);
+        // console.log(".........", res);
 
         if (res?.status === true) {
           showMessage({
