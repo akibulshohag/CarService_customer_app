@@ -415,10 +415,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: deviceWidth / 1.2,
     margin: 12,
-    // borderBottomWidth: 1,
     padding: 10,
-    // borderBottomColor: "#1234",
-    // borderRadius:5,
     backgroundColor: "#fff",
   },
   loginBtn: {

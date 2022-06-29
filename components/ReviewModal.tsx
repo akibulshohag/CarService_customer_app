@@ -1,6 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Rating } from "react-native-ratings";
 
 import Modal from "react-native-modal";
@@ -9,12 +17,16 @@ const deviceWidth = Dimensions.get("window").width;
 
 export default function ModalScreen({ setModalOpen, ModalOpen }: any) {
   const navigation = useNavigation<any>();
-  const [count, setcount] = useState("");
+  const [count, setcount] = useState(1);
+  const [message, setmessage] = useState("");
 
   const ratingCompleted = (rating: any) => {
     //   setcount(count);
+    setcount(rating);
     console.log("Rating is--: " + rating);
   };
+
+  console.log("............count", count);
 
   return (
     <View style={styles.container}>
@@ -53,12 +65,40 @@ export default function ModalScreen({ setModalOpen, ModalOpen }: any) {
               }}
             ></View>
           </View>
-
-          <Rating
-            ratingCount={5}
-            onFinishRating={(ra: number) => ratingCompleted(ra)}
-            style={{ paddingVertical: 10 }}
-          />
+          <View style={{ paddingHorizontal: 20, alignItems: "center" }}>
+            <Rating
+              ratingCount={5}
+              fractions={1}
+              startingValue={0}
+              onFinishRating={(ra: number) => ratingCompleted(ra)}
+              style={{ paddingVertical: 10 }}
+            />
+            <View style={styles.input1}>
+              <TextInput
+                style={{ width: deviceWidth / 1.5 }}
+                onChangeText={setmessage}
+                value={message}
+                placeholder={"Enter Your Message"}
+              />
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+              marginBottom: 10,
+            }}
+          >
+            <TouchableOpacity onPress={() => setModalOpen(false)}>
+              <Text style={{ fontSize: 18, marginRight: 40 }}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={{ fontSize: 18, marginRight: 10 }}>Submit</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </View>
@@ -89,16 +129,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderBottomLeftRadius: 5,
   },
-  loginBtn1: {
-    backgroundColor: `#004C3F`,
-    padding: 15,
-    width: deviceWidth / 2.2,
-    alignItems: "center",
-    justifyContent: "center",
-    borderBottomRightRadius: 5,
-  },
-  border: {
-    borderLeftWidth: 1.5,
+  input1: {
+    height: 60,
+    width: deviceWidth / 1.2,
+    padding: 5,
+    backgroundColor: "#f2f2f2",
+    borderRadius: 2,
+    borderWidth: 0.2,
+    borderColor: "#1234",
+    marginBottom: 10,
   },
 });
 function ratingCompleted(rating: any) {
