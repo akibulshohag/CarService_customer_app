@@ -305,7 +305,7 @@ export default function UpdateProfile() {
             </View>
           </View>
           <TouchableOpacity
-            // onPress={() => `${console.log("......ffffffffff")}`}
+            onPress={() => navigation.navigate("BookSummary")}
             style={styles.loginBtn}
           >
             {loading ? (
