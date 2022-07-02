@@ -17,7 +17,7 @@ const deviceWidth = Dimensions.get("window").width;
 
 export default function ModalScreen({ setModalOpen, ModalOpen }: any) {
   const navigation = useNavigation<any>();
-  const [count, setcount] = useState(1);
+  const [count, setcount] = useState(0);
   const [message, setmessage] = useState("");
 
   const ratingCompleted = (rating: any) => {

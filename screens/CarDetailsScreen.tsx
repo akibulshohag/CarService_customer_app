@@ -292,7 +292,7 @@ export default function HomeScreen(props: any) {
           </View>
           <View style={{ alignItems: "center", marginTop: 10 }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate("ConfirmOrder")}
+              onPress={() => navigation.navigate("Booked")}
               style={styles.loginBtn}
             >
               {loading ? (
