@@ -1,6 +1,8 @@
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -28,79 +30,33 @@ export default function UpdateProfile() {
   const [name, setname] = useState("");
   const [carSeat, setcarSeat] = useState([]);
   const [loading, setloading] = useState(false);
+  const [date, setDate] = useState("");
+  const [showDate, setshowDate] = useState(false);
+  const [showTime, setshowTime] = useState(false);
+  const [time, settime] = useState("");
+  const [isActive, setisActive] = useState(false);
+
+  console.log("...........fff", isActive);
 
   //selected state
   const [selectedDistrict, setselectedDistrict] = useState("");
   const [selectedToDistrict, setselectedToDistrict] = useState("");
 
-  const district = [
-    {
-      id: 1,
-      fromDistrict: "Dhaka",
-    },
-    {
-      id: 2,
-      fromDistrict: "Tangail",
-    },
-    {
-      id: 3,
-      fromDistrict: "Ghatail",
-      toDis: [
-        {
-          id: 1,
-          toDistrict: "dhaka4",
-        },
-        {
-          id: 2,
-          toDistrict: "dhaka5",
-        },
-        {
-          id: 3,
-          toDistrict: "dhaka6",
-        },
-      ],
-    },
-    {
-      id: 4,
-      fromDistrict: "Sunotia",
-    },
-    {
-      id: 5,
-      fromDistrict: "Fulhara",
-    },
-    {
-      id: 6,
-      fromDistrict: "Fulhara1",
-      toDis: [
-        {
-          id: 1,
-          toDistrict: "dhaka1",
-        },
-        {
-          id: 2,
-          toDistrict: "dhaka2",
-        },
-        {
-          id: 3,
-          toDistrict: "dhaka3",
-        },
-      ],
-    },
-    {
-      id: 7,
-      fromDistrict: "Fulhara2",
-    },
-  ];
+  const onChange = (event: any, selectedDate: any) => {
+    setshowDate(false);
 
-  const getToDistrict = (id: any) => {
-    let index = district.findIndex((e) => e.id == id);
-    // console.log(".........index", index);
-    setcarSeat(district[index]?.toDis);
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+  };
+  const onChangeTime = (event: any, selectedDate: any) => {
+    setshowTime(false);
+
+    const currentDate = selectedDate || time;
+    settime(currentDate);
   };
 
-  // console.log("............children", carSeat);
-
-  //   console.log("............", selectedDistrict);
+  var d = new Date().getUTCHours();
+  // var n = d.getUTCHours();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -126,33 +82,46 @@ export default function UpdateProfile() {
               width: deviceWidth / 1.3,
             }}
           >
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Search</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Booking</Text>
           </View>
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ alignItems: "center", paddingVertical: 10 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-            You Can Search Car By Any Field
+            Add New Booking
           </Text>
         </View>
-        <View style={{ alignItems: "center" }}>
-          <View style={{}}>
-            <Text style={{ fontSize: 14, marginBottom: 5 }}>Car Name</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setname}
-              value={name}
-              placeholder={"Car Name"}
-            />
+        <View style={{ paddingHorizontal: 20 }}>
+          <View>
+            <Text>Customer</Text>
+            <View style={styles.picker}>
+              <Picker
+                selectedValue={selectedDistrict}
+                mode="dropdown"
+                onValueChange={(itemValue, itemIndex) => {
+                  setselectedDistrict(itemValue);
+                }}
+              >
+                <Picker.Item label="Select Customer" value={""} />
+
+                {/* {carSeat?.map((item: any, index) => ( */}
+                <Picker.Item
+                  //   key={index}
+                  label={`Dhaka`}
+                  value={`Dhaka`}
+                />
+                {/* ))} */}
+              </Picker>
+            </View>
           </View>
           <View style={{}}>
-            <Text style={{ fontSize: 14, marginBottom: 5 }}>Car Brand</Text>
+            <Text style={{ fontSize: 14, marginBottom: 5 }}>Pick Up Phone</Text>
             <TextInput
               style={styles.input}
               onChangeText={setname}
               value={name}
-              placeholder={"Car Brand"}
+              placeholder={"Phone Number"}
             />
           </View>
           <View
@@ -160,174 +129,111 @@ export default function UpdateProfile() {
               flexDirection: "row",
             }}
           >
-            <View style={{}}>
-              <Text style={{ fontSize: 14, marginBottom: 5 }}>Car Seat</Text>
-              <TextInput
-                style={styles.input1}
-                onChangeText={setname}
-                value={name}
-                placeholder={"Car Seat"}
+            <View style={{ marginTop: 0 }}>
+              <Text style={{ color: "#000" }}>Pick Up Date</Text>
+              <View>
+                <TouchableOpacity
+                  onPress={() => setshowDate(true)}
+                  style={styles.picker1}
+                >
+                  <Text
+                    style={{
+                      color: "#000",
+                      paddingVertical: 14,
+                      marginLeft: 5,
+                    }}
+                  >
+                    {date ? moment(date).format("ll") : "Select Date"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={{ marginLeft: 10 }}>
+              <Text style={{ color: "#000" }}>Pick Up Time</Text>
+              <View>
+                <TouchableOpacity
+                  onPress={() => setshowTime(true)}
+                  style={styles.picker1}
+                >
+                  <Text
+                    style={{
+                      color: "#000",
+                      paddingVertical: 14,
+                      marginLeft: 5,
+                    }}
+                  >
+                    {time ? moment(time).format("HH mm A") : "Select Time"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <View style={{}}>
+            <Text style={{ fontSize: 14, marginBottom: 5 }}>Address</Text>
+            <TextInput
+              style={styles.input1}
+              onChangeText={setname}
+              value={name}
+              placeholder={"Enter Address"}
+              numberOfLines={4}
+            />
+          </View>
+          <View style={{}}>
+            <Text style={{ fontSize: 14, marginBottom: 5 }}>Note</Text>
+            <TextInput
+              style={styles.input1}
+              onChangeText={setname}
+              value={name}
+              placeholder={"Write Something"}
+              numberOfLines={4}
+            />
+          </View>
+
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            {!isActive ? (
+              <MaterialCommunityIcons
+                onPress={() => setisActive(true)}
+                name="checkbox-blank-outline"
+                size={20}
               />
-            </View>
-            <View style={{ marginLeft: 10 }}>
-              <Text style={{ fontSize: 14, marginBottom: 5 }}>Car Rent</Text>
-              <TextInput
-                style={styles.input1}
-                onChangeText={setname}
-                value={name}
-                placeholder={"Car Rent"}
+            ) : (
+              <MaterialCommunityIcons
+                onPress={() => setisActive(false)}
+                name="checkbox-marked"
+                size={20}
               />
-            </View>
+            )}
+            <Text style={{ fontSize: 16, marginLeft: 5 }}>Round Trip</Text>
           </View>
-          <View style={{ flexDirection: "row" }}>
-            <View>
-              <Text>From District</Text>
-              <View style={styles.picker}>
-                <Picker
-                  selectedValue={selectedDistrict}
-                  mode="dropdown"
-                  onValueChange={(itemValue, itemIndex) => {
-                    setselectedDistrict(itemValue);
-                    getToDistrict(itemValue);
-                  }}
-                >
-                  <Picker.Item label="Select Any" value={""} />
 
-                  {district?.map((item: any, index) => (
-                    <Picker.Item
-                      key={index}
-                      label={`${item?.fromDistrict}`}
-                      value={`${item?.id}`}
-                    />
-                  ))}
-                </Picker>
-              </View>
-            </View>
-            <View style={{ marginLeft: 10 }}>
-              <Text>To District</Text>
-              <View style={styles.picker}>
-                <Picker
-                  selectedValue={selectedToDistrict}
-                  mode="dropdown"
-                  onValueChange={(itemValue, itemIndex) => {
-                    setselectedToDistrict(itemValue);
-                  }}
-                >
-                  <Picker.Item label="Select Any" value={""} />
-
-                  {carSeat?.map((item: any, index) => (
-                    <Picker.Item
-                      key={index}
-                      label={`${item?.toDistrict}`}
-                      value={`${item?.id}`}
-                    />
-                  ))}
-                </Picker>
-              </View>
-            </View>
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            <View>
-              <Text>From Upazila</Text>
-              <View style={styles.picker}>
-                <Picker
-                  selectedValue={selectedDistrict}
-                  mode="dropdown"
-                  onValueChange={(itemValue, itemIndex) => {
-                    setselectedDistrict(itemValue);
-                  }}
-                >
-                  <Picker.Item label="Select Any" value={""} />
-
-                  {/* {carSeat?.map((item: any, index) => ( */}
-                  <Picker.Item
-                    //   key={index}
-                    label={`Dhaka`}
-                    value={`Dhaka`}
-                  />
-                  {/* ))} */}
-                </Picker>
-              </View>
-            </View>
-            <View style={{ marginLeft: 10 }}>
-              <Text>To Upazila</Text>
-              <View style={styles.picker}>
-                <Picker
-                  selectedValue={selectedDistrict}
-                  mode="dropdown"
-                  onValueChange={(itemValue, itemIndex) => {
-                    setselectedDistrict(itemValue);
-                  }}
-                >
-                  <Picker.Item label="Select Any" value={""} />
-
-                  {/* {carSeat?.map((item: any, index) => ( */}
-                  <Picker.Item
-                    //   key={index}
-                    label={`Dhaka`}
-                    value={`Dhaka`}
-                  />
-                  {/* ))} */}
-                </Picker>
-              </View>
-            </View>
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            <View>
-              <Text>From Area</Text>
-              <View style={styles.picker}>
-                <Picker
-                  selectedValue={selectedDistrict}
-                  mode="dropdown"
-                  onValueChange={(itemValue, itemIndex) => {
-                    setselectedDistrict(itemValue);
-                  }}
-                >
-                  <Picker.Item label="Select Any" value={""} />
-
-                  {/* {carSeat?.map((item: any, index) => ( */}
-                  <Picker.Item
-                    //   key={index}
-                    label={`Dhaka`}
-                    value={`Dhaka`}
-                  />
-                  {/* ))} */}
-                </Picker>
-              </View>
-            </View>
-            <View style={{ marginLeft: 10 }}>
-              <Text>To Area</Text>
-              <View style={styles.picker}>
-                <Picker
-                  selectedValue={selectedDistrict}
-                  mode="dropdown"
-                  onValueChange={(itemValue, itemIndex) => {
-                    setselectedDistrict(itemValue);
-                  }}
-                >
-                  <Picker.Item label="Select Any" value={""} />
-
-                  {/* {carSeat?.map((item: any, index) => ( */}
-                  <Picker.Item
-                    //   key={index}
-                    label={`Dhaka`}
-                    value={`Dhaka`}
-                  />
-                  {/* ))} */}
-                </Picker>
-              </View>
-            </View>
-          </View>
           <View style={{ alignItems: "center", marginTop: 10 }}>
             <TouchableOpacity style={styles.loginBtn}>
               {loading ? (
                 <ActivityIndicator size={"small"} color="#fff" />
               ) : (
-                <Text style={{ fontSize: 16, color: "#fff" }}>Find Car</Text>
+                <Text style={{ fontSize: 16, color: "#fff" }}>New Booking</Text>
               )}
             </TouchableOpacity>
           </View>
         </View>
+        {showDate ? (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={new Date()}
+            mode="date"
+            display="default"
+            onChange={onChange}
+          />
+        ) : null}
+        {showTime ? (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={new Date()}
+            mode="time"
+            display="default"
+            onChange={onChangeTime}
+          />
+        ) : null}
       </ScrollView>
     </SafeAreaView>
   );
@@ -355,8 +261,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   input1: {
-    height: 40,
-    width: deviceWidth / 2.3,
+    height: 80,
+    width: deviceWidth / 1.1,
     padding: 10,
     backgroundColor: "#fff",
     elevation: 5,
@@ -364,6 +270,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   picker: {
+    height: 45,
+    width: deviceWidth / 1.1,
+    backgroundColor: "#fff",
+    elevation: 5,
+    borderRadius: 5,
+    marginBottom: 10,
+    justifyContent: "center",
+  },
+  picker1: {
     height: 45,
     width: deviceWidth / 2.3,
     backgroundColor: "#fff",
