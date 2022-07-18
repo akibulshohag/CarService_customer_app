@@ -36,8 +36,6 @@ export default function UpdateProfile() {
   const [time, settime] = useState("");
   const [isActive, setisActive] = useState(false);
 
-  console.log("...........fff", isActive);
-
   //selected state
   const [selectedDistrict, setselectedDistrict] = useState("");
   const [selectedToDistrict, setselectedToDistrict] = useState("");
@@ -55,8 +53,10 @@ export default function UpdateProfile() {
     settime(currentDate);
   };
 
-  var d = new Date().getUTCHours();
+  var d = new Date().getTime();
   // var n = d.getUTCHours();
+
+  console.log("...........fff", moment(time).format(" HH mm A"));
 
   return (
     <SafeAreaView style={styles.container}>
@@ -230,6 +230,7 @@ export default function UpdateProfile() {
             testID="dateTimePicker"
             value={new Date()}
             mode="time"
+            is24Hour={true}
             display="default"
             onChange={onChangeTime}
           />
