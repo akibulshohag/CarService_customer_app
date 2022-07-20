@@ -118,7 +118,7 @@ export default function TabOneScreen() {
         </View>
         <TouchableOpacity
           style={styles.loginBtn}
-          // onPress={() => loginWithPass()}
+          onPress={() => navigation.navigate("Booked")}
         >
           {loading ? (
             <ActivityIndicator size={"small"} color="#fff" />

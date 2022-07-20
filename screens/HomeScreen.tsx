@@ -1,8 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
-import moment from "moment";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -56,74 +54,11 @@ export default function HomeScreen() {
                   color: `${scheme === "dark" ? "#fff" : "#fff"}`,
                   fontSize: 22,
                   fontWeight: "bold",
+                  textAlign: "center",
                 }}
               >
                 Own a car without actually buying it. So book now
               </Text>
-              <View>
-                <Text
-                  style={{
-                    paddingTop: 5,
-                    color: "#fff",
-                    fontSize: 16,
-                  }}
-                >
-                  Select Pick Up Location
-                </Text>
-                <View style={styles.picker}>
-                  <Picker
-                    selectedValue={city}
-                    mode="dropdown"
-                    style={{ color: "#fff" }}
-                    onValueChange={(itemValue, itemIndex) => setcity(itemValue)}
-                  >
-                    <Picker.Item label="Inside City" value="InsideCity" />
-                    <Picker.Item label="Outside City" value="OutsideCity" />
-                  </Picker>
-                </View>
-              </View>
-              <View style={{ marginTop: 10 }}>
-                <Text style={{ color: "#fff" }}>Start Trip</Text>
-                <View>
-                  <TouchableOpacity
-                    onPress={() => setshowDate(true)}
-                    style={styles.picker}
-                  >
-                    <Text
-                      style={{
-                        color: "#fff",
-                        paddingVertical: 14,
-                        marginLeft: 5,
-                      }}
-                    >
-                      {date
-                        ? moment(date).format("ll,  HH mm")
-                        : "Select Date and Time"}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={{ marginTop: 10 }}>
-                <Text style={{ color: "#fff" }}>Start Trip</Text>
-                <View>
-                  <TouchableOpacity
-                    onPress={() => setshowDate(true)}
-                    style={styles.picker}
-                  >
-                    <Text
-                      style={{
-                        color: "#fff",
-                        paddingVertical: 14,
-                        marginLeft: 5,
-                      }}
-                    >
-                      {date
-                        ? moment(date).format("ll,  HH mm")
-                        : "Select Date and Time"}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
             </View>
             <View
               style={{
@@ -185,22 +120,22 @@ export default function HomeScreen() {
             >
               <View>
                 <Text
-                  style={[styles.title, { fontSize: 22, fontWeight: "bold" }]}
+                  style={[styles.title, { fontSize: 18, fontWeight: "bold" }]}
                 >
                   Available Car
                 </Text>
-                <Text style={[styles.title, { fontSize: 18 }]}>
+                <Text style={[styles.title, { fontSize: 16 }]}>
                   Long Term And Short Term
                 </Text>
               </View>
               <View
                 style={{
                   backgroundColor: "#fff",
-                  padding: 10,
+                  padding: 8,
                   borderRadius: 10,
                 }}
               >
-                <AntDesign name="right" size={35} />
+                <AntDesign name="right" size={30} />
               </View>
             </TouchableOpacity>
           </View>
@@ -252,7 +187,7 @@ const styles = StyleSheet.create({
   },
   img: {
     width: deviceWidth,
-    height: deviceWidth / 1.1,
+    height: deviceWidth / 1.4,
     borderWidth: 0.5,
     resizeMode: "contain",
     // position: "relative",

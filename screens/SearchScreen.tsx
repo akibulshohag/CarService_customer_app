@@ -319,7 +319,10 @@ export default function UpdateProfile() {
             </View>
           </View>
           <View style={{ alignItems: "center", marginTop: 10 }}>
-            <TouchableOpacity style={styles.loginBtn}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("AvailableCar")}
+              style={styles.loginBtn}
+            >
               {loading ? (
                 <ActivityIndicator size={"small"} color="#fff" />
               ) : (

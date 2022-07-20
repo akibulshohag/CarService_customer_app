@@ -22,11 +22,11 @@ export default function TabOneScreen() {
       <View style={styles.stockout}>
         <Text style={styles.stockTitle}>30% OFF</Text>
       </View>
-      <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 10 }}>
+      <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 10 }}>
         BMW{"   "}
-        <Text style={{ fontSize: 18, fontWeight: "bold", color: "#004C3F" }}>
+        <Text style={{ fontSize: 16, fontWeight: "bold", color: "#004C3F" }}>
           TK.50{" "}
-          <Text style={{ fontSize: 18, fontWeight: "bold", color: "#000" }}>
+          <Text style={{ fontSize: 16, fontWeight: "bold", color: "#000" }}>
             | Day
           </Text>
         </Text>
