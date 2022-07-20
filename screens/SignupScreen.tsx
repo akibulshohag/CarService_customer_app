@@ -44,6 +44,7 @@ export default function SignUpScreen() {
   const [image, setimage] = useState("");
   const [emailValidError, setEmailValidError] = useState("");
   const [passwordValidError, setpasswordValidError] = useState("");
+  const [imageValidError, setimageValidError] = useState("");
 
   // const pickImage = async () => {
   //   // No permissions request is necessary for launching the image library
@@ -123,9 +124,14 @@ export default function SignUpScreen() {
     } else if (passWord !== confirmPassword) {
       setpasswordValidError("Password Not Matched");
       setEmailValidError("");
-    } else if (passWord === confirmPassword) {
+    } else if (image.length === 0) {
+      setimageValidError("Take Image");
+      setEmailValidError("");
+      setpasswordValidError("");
+    } else if (image.length !== 0) {
       setpasswordValidError("");
       setEmailValidError("");
+      setimageValidError("");
 
       const data = {
         name: fullName,
@@ -320,6 +326,11 @@ export default function SignUpScreen() {
                 )}
               </View>
             </View>
+            {imageValidError ? (
+              <View style={{}}>
+                <Text style={{ color: "red" }}>{imageValidError}</Text>
+              </View>
+            ) : null}
           </View>
 
           {isOtpLogin ? (
