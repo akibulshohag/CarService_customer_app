@@ -46,7 +46,7 @@ const request = async (link, params = {}, noPrefix = null, header = null) => {
     "Content-Type": "application/json",
   };
 
-  const token = await SecureStore.getItemAsync("accessToken");
+  const token = await SecureStore.getItemAsync("token");
 
   //  console.log("token",token);
 

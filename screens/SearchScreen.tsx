@@ -1,7 +1,7 @@
 import { AntDesign } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -15,6 +15,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
+import SearchService from "../services/SearchService";
 
 //components
 
@@ -26,81 +27,138 @@ export default function UpdateProfile() {
   const scheme = useColorScheme();
   const [getNotification, setgetNotification] = useState(false);
   const [name, setname] = useState("");
+  const [carName, setcarName] = useState([]);
   const [carSeat, setcarSeat] = useState([]);
+  const [minimumRent, setminimumRent] = useState("");
+  const [maximumRent, setmaximumRent] = useState("");
   const [loading, setloading] = useState(false);
+  const [fromdistrict, setfromdistrict] = useState<any>([]);
+  const [fromupazila, setfromupazila] = useState<any>([]);
+  const [fromArea, setfromArea] = useState<any>([]);
+  const [toDistrict, settoDistrict] = useState<any>([]);
+  const [toUpazila, settoUpazila] = useState<any>([]);
+  const [toArea, settoArea] = useState<any>([]);
 
   //selected state
-  const [selectedDistrict, setselectedDistrict] = useState("");
+  const [selectedFromDistrict, setselectedFromDistrict] = useState("");
+  const [selectedFromupazila, setselectedFromupazila] = useState("");
+  const [selectedFromArea, setselectedFromArea] = useState("");
   const [selectedToDistrict, setselectedToDistrict] = useState("");
+  const [selectedToupazila, setselectedToUpazila] = useState("");
+  const [selectedToArea, setselectedToArea] = useState("");
+  const [selectedCarName, setselectedCarName] = useState("");
+  const [selectedCarSeat, setselectedCarSeat] = useState("");
 
-  const district = [
-    {
-      id: 1,
-      fromDistrict: "Dhaka",
-    },
-    {
-      id: 2,
-      fromDistrict: "Tangail",
-    },
-    {
-      id: 3,
-      fromDistrict: "Ghatail",
-      toDis: [
-        {
-          id: 1,
-          toDistrict: "dhaka4",
-        },
-        {
-          id: 2,
-          toDistrict: "dhaka5",
-        },
-        {
-          id: 3,
-          toDistrict: "dhaka6",
-        },
-      ],
-    },
-    {
-      id: 4,
-      fromDistrict: "Sunotia",
-    },
-    {
-      id: 5,
-      fromDistrict: "Fulhara",
-    },
-    {
-      id: 6,
-      fromDistrict: "Fulhara1",
-      toDis: [
-        {
-          id: 1,
-          toDistrict: "dhaka1",
-        },
-        {
-          id: 2,
-          toDistrict: "dhaka2",
-        },
-        {
-          id: 3,
-          toDistrict: "dhaka3",
-        },
-      ],
-    },
-    {
-      id: 7,
-      fromDistrict: "Fulhara2",
-    },
-  ];
+  // const district = [
+  //   {
+  //     id: 1,
+  //     fromDistrict: "Dhaka",
+  //   },
+  //   {
+  //     id: 2,
+  //     fromDistrict: "Tangail",
+  //   },
+  //   {
+  //     id: 3,
+  //     fromDistrict: "Ghatail",
+  //     toDis: [
+  //       {
+  //         id: 1,
+  //         toDistrict: "dhaka4",
+  //       },
+  //       {
+  //         id: 2,
+  //         toDistrict: "dhaka5",
+  //       },
+  //       {
+  //         id: 3,
+  //         toDistrict: "dhaka6",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 4,
+  //     fromDistrict: "Sunotia",
+  //   },
+  //   {
+  //     id: 5,
+  //     fromDistrict: "Fulhara",
+  //   },
+  //   {
+  //     id: 6,
+  //     fromDistrict: "Fulhara1",
+  //     toDis: [
+  //       {
+  //         id: 1,
+  //         toDistrict: "dhaka1",
+  //       },
+  //       {
+  //         id: 2,
+  //         toDistrict: "dhaka2",
+  //       },
+  //       {
+  //         id: 3,
+  //         toDistrict: "dhaka3",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 7,
+  //     fromDistrict: "Fulhara2",
+  //   },
+  // ];
 
-  const getToDistrict = (id: any) => {
-    let index = district.findIndex((e) => e.id == id);
-    // console.log(".........index", index);
-    setcarSeat(district[index]?.toDis);
+  useEffect(() => {
+    SearchService.getCarList().then((res) => {
+      setcarName(res?.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    SearchService.getLocation().then((res) => {
+      setfromdistrict(res?.data);
+      settoDistrict(res?.data);
+    });
+  }, []);
+  useEffect(() => {
+    SearchService.getCarSeat().then((res) => {
+      setcarSeat(res?.data);
+    });
+  }, []);
+
+  const getFromupazila = async (id: any) => {
+    setselectedFromupazila("");
+    setselectedFromArea("");
+    let index = fromdistrict.findIndex((e: any) => e.districtId == id);
+    setfromupazila(fromdistrict[index]?.upazila);
+  };
+  const getFromArea = async (id: any) => {
+    setselectedFromArea("");
+    let index = fromupazila.findIndex((e: any) => e.upazilaId == id);
+    setfromArea(fromupazila[index]?.area);
   };
 
-  // console.log("............children", carSeat);
+  const getToupazila = async (id: any) => {
+    setselectedToUpazila("");
+    setselectedToArea("");
+    let index = toDistrict.findIndex((e: any) => e.districtId == id);
+    settoUpazila(toDistrict[index]?.upazila);
+  };
 
-  //   console.log("............", selectedDistrict);
+  const getToArea = async (id: any) => {
+    setselectedToArea("");
+    let index = toUpazila.findIndex((e: any) => e.upazilaId == id);
+    settoArea(toUpazila[index]?.area);
+  };
+  const getSeat = async (id: any) => {
+    setcarSeat([]);
+    let index = carName.findIndex((e: any) => e.id == id);
+    console.log(".........index", index);
+
+    setselectedCarSeat(carName[index]?.carSeatId);
+  };
+
+  console.log("............", selectedCarSeat);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -137,23 +195,51 @@ export default function UpdateProfile() {
           </Text>
         </View>
         <View style={{ alignItems: "center" }}>
-          <View style={{}}>
-            <Text style={{ fontSize: 14, marginBottom: 5 }}>Car Name</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setname}
-              value={name}
-              placeholder={"Car Name"}
-            />
+          <View>
+            <Text>Car Name</Text>
+            <View style={styles.picker1}>
+              <Picker
+                selectedValue={selectedCarName}
+                mode="dropdown"
+                onValueChange={(itemValue, itemIndex) => {
+                  setselectedCarName(itemValue);
+                  getSeat(itemValue);
+                }}
+              >
+                <Picker.Item label="Select Any" value={""} />
+
+                {carName?.map((item: any, index: number) => (
+                  <Picker.Item
+                    key={index}
+                    label={item?.name}
+                    value={item?.id}
+                  />
+                ))}
+              </Picker>
+            </View>
           </View>
-          <View style={{}}>
-            <Text style={{ fontSize: 14, marginBottom: 5 }}>Car Brand</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setname}
-              value={name}
-              placeholder={"Car Brand"}
-            />
+          <View>
+            <Text>Car Seat</Text>
+            <View style={styles.picker1}>
+              <Picker
+                selectedValue={selectedCarSeat}
+                mode="dropdown"
+                onValueChange={(itemValue, itemIndex) => {
+                  setselectedCarSeat(itemValue);
+                  // getFromupazila(itemValue);
+                }}
+              >
+                <Picker.Item label="Select Any" value={""} />
+
+                {carSeat?.map((item: any, index: number) => (
+                  <Picker.Item
+                    key={index}
+                    label={`${item?.carSeatNumber}`}
+                    value={`${item?.id}`}
+                  />
+                ))}
+              </Picker>
+            </View>
           </View>
           <View
             style={{
@@ -161,20 +247,24 @@ export default function UpdateProfile() {
             }}
           >
             <View style={{}}>
-              <Text style={{ fontSize: 14, marginBottom: 5 }}>Car Seat</Text>
+              <Text style={{ fontSize: 14, marginBottom: 5 }}>
+                Minimum Rent(Tk)
+              </Text>
               <TextInput
                 style={styles.input1}
-                onChangeText={setname}
-                value={name}
+                onChangeText={setminimumRent}
+                value={minimumRent}
                 placeholder={"Car Seat"}
               />
             </View>
             <View style={{ marginLeft: 10 }}>
-              <Text style={{ fontSize: 14, marginBottom: 5 }}>Car Rent</Text>
+              <Text style={{ fontSize: 14, marginBottom: 5 }}>
+                Maximum Rent(Tk)
+              </Text>
               <TextInput
                 style={styles.input1}
-                onChangeText={setname}
-                value={name}
+                onChangeText={setmaximumRent}
+                value={maximumRent}
                 placeholder={"Car Rent"}
               />
             </View>
@@ -184,20 +274,20 @@ export default function UpdateProfile() {
               <Text>From District</Text>
               <View style={styles.picker}>
                 <Picker
-                  selectedValue={selectedDistrict}
+                  selectedValue={selectedFromDistrict}
                   mode="dropdown"
                   onValueChange={(itemValue, itemIndex) => {
-                    setselectedDistrict(itemValue);
-                    getToDistrict(itemValue);
+                    setselectedFromDistrict(itemValue);
+                    getFromupazila(itemValue);
                   }}
                 >
                   <Picker.Item label="Select Any" value={""} />
 
-                  {district?.map((item: any, index) => (
+                  {fromdistrict?.map((item: any, index: number) => (
                     <Picker.Item
                       key={index}
-                      label={`${item?.fromDistrict}`}
-                      value={`${item?.id}`}
+                      label={item?.districtName}
+                      value={item?.districtId}
                     />
                   ))}
                 </Picker>
@@ -211,15 +301,16 @@ export default function UpdateProfile() {
                   mode="dropdown"
                   onValueChange={(itemValue, itemIndex) => {
                     setselectedToDistrict(itemValue);
+                    getToupazila(itemValue);
                   }}
                 >
                   <Picker.Item label="Select Any" value={""} />
 
-                  {carSeat?.map((item: any, index) => (
+                  {toDistrict?.map((item: any, index: number) => (
                     <Picker.Item
                       key={index}
-                      label={`${item?.toDistrict}`}
-                      value={`${item?.id}`}
+                      label={item?.districtName}
+                      value={item?.districtId}
                     />
                   ))}
                 </Picker>
@@ -231,21 +322,22 @@ export default function UpdateProfile() {
               <Text>From Upazila</Text>
               <View style={styles.picker}>
                 <Picker
-                  selectedValue={selectedDistrict}
+                  selectedValue={selectedFromupazila}
                   mode="dropdown"
                   onValueChange={(itemValue, itemIndex) => {
-                    setselectedDistrict(itemValue);
+                    setselectedFromupazila(itemValue);
+                    getFromArea(itemValue);
                   }}
                 >
                   <Picker.Item label="Select Any" value={""} />
 
-                  {/* {carSeat?.map((item: any, index) => ( */}
-                  <Picker.Item
-                    //   key={index}
-                    label={`Dhaka`}
-                    value={`Dhaka`}
-                  />
-                  {/* ))} */}
+                  {fromupazila?.map((item: any, index: number) => (
+                    <Picker.Item
+                      key={index}
+                      label={item?.upazilaName}
+                      value={item?.upazilaId}
+                    />
+                  ))}
                 </Picker>
               </View>
             </View>
@@ -253,21 +345,22 @@ export default function UpdateProfile() {
               <Text>To Upazila</Text>
               <View style={styles.picker}>
                 <Picker
-                  selectedValue={selectedDistrict}
+                  selectedValue={selectedToupazila}
                   mode="dropdown"
                   onValueChange={(itemValue, itemIndex) => {
-                    setselectedDistrict(itemValue);
+                    setselectedToUpazila(itemValue);
+                    getToArea(itemValue);
                   }}
                 >
                   <Picker.Item label="Select Any" value={""} />
 
-                  {/* {carSeat?.map((item: any, index) => ( */}
-                  <Picker.Item
-                    //   key={index}
-                    label={`Dhaka`}
-                    value={`Dhaka`}
-                  />
-                  {/* ))} */}
+                  {toUpazila?.map((item: any, index: number) => (
+                    <Picker.Item
+                      key={index}
+                      label={item?.upazilaName}
+                      value={item?.upazilaId}
+                    />
+                  ))}
                 </Picker>
               </View>
             </View>
@@ -277,21 +370,21 @@ export default function UpdateProfile() {
               <Text>From Area</Text>
               <View style={styles.picker}>
                 <Picker
-                  selectedValue={selectedDistrict}
+                  selectedValue={selectedFromArea}
                   mode="dropdown"
                   onValueChange={(itemValue, itemIndex) => {
-                    setselectedDistrict(itemValue);
+                    setselectedFromArea(itemValue);
                   }}
                 >
                   <Picker.Item label="Select Any" value={""} />
 
-                  {/* {carSeat?.map((item: any, index) => ( */}
-                  <Picker.Item
-                    //   key={index}
-                    label={`Dhaka`}
-                    value={`Dhaka`}
-                  />
-                  {/* ))} */}
+                  {fromArea?.map((item: any, index: number) => (
+                    <Picker.Item
+                      key={index}
+                      label={item?.name}
+                      value={item?.id}
+                    />
+                  ))}
                 </Picker>
               </View>
             </View>
@@ -299,21 +392,21 @@ export default function UpdateProfile() {
               <Text>To Area</Text>
               <View style={styles.picker}>
                 <Picker
-                  selectedValue={selectedDistrict}
+                  selectedValue={selectedToArea}
                   mode="dropdown"
                   onValueChange={(itemValue, itemIndex) => {
-                    setselectedDistrict(itemValue);
+                    setselectedToArea(itemValue);
                   }}
                 >
                   <Picker.Item label="Select Any" value={""} />
 
-                  {/* {carSeat?.map((item: any, index) => ( */}
-                  <Picker.Item
-                    //   key={index}
-                    label={`Dhaka`}
-                    value={`Dhaka`}
-                  />
-                  {/* ))} */}
+                  {toArea?.map((item: any, index: number) => (
+                    <Picker.Item
+                      key={index}
+                      label={item?.name}
+                      value={item?.id}
+                    />
+                  ))}
                 </Picker>
               </View>
             </View>
@@ -369,6 +462,15 @@ const styles = StyleSheet.create({
   picker: {
     height: 45,
     width: deviceWidth / 2.3,
+    backgroundColor: "#fff",
+    elevation: 5,
+    borderRadius: 5,
+    marginBottom: 10,
+    justifyContent: "center",
+  },
+  picker1: {
+    height: 45,
+    width: deviceWidth / 1.1,
     backgroundColor: "#fff",
     elevation: 5,
     borderRadius: 5,

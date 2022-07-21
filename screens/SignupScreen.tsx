@@ -134,8 +134,8 @@ export default function SignUpScreen() {
       setimageValidError("");
 
       const data = {
-        name: fullName,
-        phone: phone,
+        name: fullName || "",
+        phone: phone || "",
         email: email,
         password: passWord,
         avatar: [img],

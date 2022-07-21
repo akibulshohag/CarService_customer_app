@@ -41,6 +41,8 @@ const MyTheme = {
 
 export default function App() {
   const scheme = useColorScheme();
+  // const isFocused = useIsFocused();
+
   // console.log(".........", scheme);
   //theme={ scheme === 'dark' ? DarkTheme : MyTheme}
 
