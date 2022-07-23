@@ -1,5 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
   Dimensions,
@@ -20,6 +20,8 @@ const deviceHeight = Dimensions.get("window").height;
 export default function HomeScreen(props: any) {
   const navigation = useNavigation<any>();
   const scheme = useColorScheme();
+  const route = useRoute();
+  const { data }: any = route.params;
 
   const [city, setcity] = useState("Inside City");
   const [showDate, setshowDate] = useState(false);
@@ -27,6 +29,8 @@ export default function HomeScreen(props: any) {
   const [loading, setloading] = useState(false);
   const [datee, setDatee] = useState(new Date());
   const [open, setOpen] = useState("20ddddddddddd");
+
+  // console.log("............", data);
 
   const renderItem = ({ item, index }: any) => {
     return (

@@ -1,4 +1,4 @@
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
@@ -15,6 +15,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
+import SelectList from "react-native-dropdown-select-list";
 import SearchService from "../services/SearchService";
 
 //components
@@ -26,8 +27,8 @@ export default function UpdateProfile() {
   const navigation = useNavigation<any>();
   const scheme = useColorScheme();
   const [getNotification, setgetNotification] = useState(false);
-  const [name, setname] = useState("");
-  const [carName, setcarName] = useState([]);
+
+  const [carName, setcarName] = useState<any>([]);
   const [carSeat, setcarSeat] = useState([]);
   const [minimumRent, setminimumRent] = useState("");
   const [maximumRent, setmaximumRent] = useState("");
@@ -38,6 +39,7 @@ export default function UpdateProfile() {
   const [toDistrict, settoDistrict] = useState<any>([]);
   const [toUpazila, settoUpazila] = useState<any>([]);
   const [toArea, settoArea] = useState<any>([]);
+  const [seat, setseat] = useState<any>("");
 
   //selected state
   const [selectedFromDistrict, setselectedFromDistrict] = useState("");
@@ -49,64 +51,80 @@ export default function UpdateProfile() {
   const [selectedCarName, setselectedCarName] = useState("");
   const [selectedCarSeat, setselectedCarSeat] = useState("");
 
-  // const district = [
-  //   {
-  //     id: 1,
-  //     fromDistrict: "Dhaka",
-  //   },
-  //   {
-  //     id: 2,
-  //     fromDistrict: "Tangail",
-  //   },
-  //   {
-  //     id: 3,
-  //     fromDistrict: "Ghatail",
-  //     toDis: [
-  //       {
-  //         id: 1,
-  //         toDistrict: "dhaka4",
-  //       },
-  //       {
-  //         id: 2,
-  //         toDistrict: "dhaka5",
-  //       },
-  //       {
-  //         id: 3,
-  //         toDistrict: "dhaka6",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 4,
-  //     fromDistrict: "Sunotia",
-  //   },
-  //   {
-  //     id: 5,
-  //     fromDistrict: "Fulhara",
-  //   },
-  //   {
-  //     id: 6,
-  //     fromDistrict: "Fulhara1",
-  //     toDis: [
-  //       {
-  //         id: 1,
-  //         toDistrict: "dhaka1",
-  //       },
-  //       {
-  //         id: 2,
-  //         toDistrict: "dhaka2",
-  //       },
-  //       {
-  //         id: 3,
-  //         toDistrict: "dhaka3",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 7,
-  //     fromDistrict: "Fulhara2",
-  //   },
-  // ];
+  const district = [
+    {
+      id: 1,
+      name: "dhaka",
+    },
+    {
+      id: 2,
+      name: "tangail",
+    },
+    {
+      id: 3,
+      name: "ghatail",
+      // toDis: [
+      //   {
+      //     id: 1,
+      //     toDistrict: "dhaka4",
+      //   },
+      //   {
+      //     id: 2,
+      //     toDistrict: "dhaka5",
+      //   },
+      //   {
+      //     id: 3,
+      //     toDistrict: "dhaka6",
+      //   },
+      // ],
+    },
+    {
+      id: 4,
+      name: "sunotia",
+    },
+    {
+      id: 5,
+      name: "fulhara",
+    },
+    {
+      id: 6,
+      name: "fulhara1",
+      // toDis: [
+      //   {
+      //     id: 1,
+      //     toDistrict: "dhaka1",
+      //   },
+      //   {
+      //     id: 2,
+      //     toDistrict: "dhaka2",
+      //   },
+      //   {
+      //     id: 3,
+      //     toDistrict: "dhaka3",
+      //   },
+      // ],
+    },
+    {
+      id: 7,
+      name: "fulhara2",
+    },
+  ];
+
+  const [name, setname] = useState([]);
+
+  const items = [
+    //name key is must.It is to show the text in front
+    { id: 1, name: "angellist" },
+    { id: 2, name: "codepen" },
+    { id: 3, name: "envelope" },
+    { id: 4, name: "etsy" },
+    { id: 5, name: "facebook" },
+    { id: 6, name: "foursquare" },
+    { id: 7, name: "github-alt" },
+    { id: 8, name: "github" },
+    { id: 9, name: "gitlab" },
+    { id: 10, name: "instagram" },
+  ];
 
   useEffect(() => {
     SearchService.getCarList().then((res) => {
@@ -117,6 +135,10 @@ export default function UpdateProfile() {
   useEffect(() => {
     SearchService.getLocation().then((res) => {
       setfromdistrict(res?.data);
+      let newArray = res?.data?.map((item: any) => {
+        return { key: item?.districtId, value: item?.districtName };
+      });
+      setname(newArray);
       settoDistrict(res?.data);
     });
   }, []);
@@ -132,6 +154,24 @@ export default function UpdateProfile() {
     let index = fromdistrict.findIndex((e: any) => e.districtId == id);
     setfromupazila(fromdistrict[index]?.upazila);
   };
+  // useEffect(() => {
+  const extra = async () => {
+    // console.log("........");
+
+    // setselectedFromupazila("");
+    // setselectedFromArea("");
+    let index = fromdistrict.findIndex(
+      (e: any) => e.districtId == selectedFromDistrict
+    );
+    let newArray = fromdistrict[index]?.upazila;
+    let array = newArray?.map((item: any) => {
+      return { key: item?.upazilaId, value: item?.upazilaName };
+    });
+    setfromupazila(array);
+  };
+
+  // });
+
   const getFromArea = async (id: any) => {
     setselectedFromArea("");
     let index = fromupazila.findIndex((e: any) => e.upazilaId == id);
@@ -153,12 +193,11 @@ export default function UpdateProfile() {
   const getSeat = async (id: any) => {
     setcarSeat([]);
     let index = carName.findIndex((e: any) => e.id == id);
-    console.log(".........index", index);
-
     setselectedCarSeat(carName[index]?.carSeatId);
+    setseat(carName[index]?.carSeatNumber);
   };
 
-  console.log("............", selectedCarSeat);
+  console.log("............id", fromupazila);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -218,6 +257,36 @@ export default function UpdateProfile() {
               </Picker>
             </View>
           </View>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View>
+              <Text>From District</Text>
+              <SelectList
+                onSelect={() => extra()}
+                setSelected={setselectedFromDistrict}
+                data={name}
+                arrowicon={
+                  <FontAwesome name="chevron-down" size={12} color={"black"} />
+                }
+                search={true}
+                // inputStyles={styles.picker}
+                boxStyles={styles.picker2} //override default styles
+              />
+            </View>
+            <View style={{ marginLeft: 10 }}>
+              <Text>From District</Text>
+              <SelectList
+                onSelect={() => selectedFromupazila}
+                setSelected={setselectedFromupazila}
+                data={fromupazila}
+                arrowicon={
+                  <FontAwesome name="chevron-down" size={12} color={"black"} />
+                }
+                search={true}
+                // inputStyles={styles.picker}
+                boxStyles={styles.picker2} //override default styles
+              />
+            </View>
+          </View>
           <View>
             <Text>Car Seat</Text>
             <View style={styles.picker1}>
@@ -229,7 +298,10 @@ export default function UpdateProfile() {
                   // getFromupazila(itemValue);
                 }}
               >
-                <Picker.Item label="Select Any" value={""} />
+                <Picker.Item
+                  label={selectedCarSeat ? `${seat}` : "Select any"}
+                  value={""}
+                />
 
                 {carSeat?.map((item: any, index: number) => (
                   <Picker.Item
@@ -241,6 +313,7 @@ export default function UpdateProfile() {
               </Picker>
             </View>
           </View>
+
           <View
             style={{
               flexDirection: "row",
@@ -413,7 +486,9 @@ export default function UpdateProfile() {
           </View>
           <View style={{ alignItems: "center", marginTop: 10 }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate("AvailableCar")}
+              onPress={() =>
+                navigation.navigate("AvailableCar", { data: district })
+              }
               style={styles.loginBtn}
             >
               {loading ? (
@@ -467,6 +542,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     justifyContent: "center",
+  },
+  picker2: {
+    height: 45,
+    width: deviceWidth / 2.3,
+    backgroundColor: "#fff",
+    elevation: 5,
+    borderRadius: 5,
+    marginBottom: 10,
+    borderWidth: 0,
+    alignItems: "center",
+    // justifyContent: "center",
   },
   picker1: {
     height: 45,
