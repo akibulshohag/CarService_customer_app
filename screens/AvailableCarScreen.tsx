@@ -21,7 +21,7 @@ export default function HomeScreen(props: any) {
   const navigation = useNavigation<any>();
   const scheme = useColorScheme();
   const route = useRoute();
-  const { data }: any = route.params;
+  const { carList }: any = route.params;
 
   const [city, setcity] = useState("Inside City");
   const [showDate, setshowDate] = useState(false);
@@ -30,7 +30,7 @@ export default function HomeScreen(props: any) {
   const [datee, setDatee] = useState(new Date());
   const [open, setOpen] = useState("20ddddddddddd");
 
-  // console.log("............", data);
+  // console.log("............", carList);
 
   const renderItem = ({ item, index }: any) => {
     return (
@@ -41,7 +41,7 @@ export default function HomeScreen(props: any) {
           // elevation: 5,
         }}
       >
-        <AvailableCar />
+        <AvailableCar carList={item} />
       </View>
     );
   };
@@ -59,7 +59,7 @@ export default function HomeScreen(props: any) {
           }}
         >
           <AntDesign
-            onPress={() => navigation.navigate("HomeScreen")}
+            onPress={() => navigation.goBack()}
             name="left"
             size={25}
             color={"black"}
@@ -92,7 +92,7 @@ export default function HomeScreen(props: any) {
         </ScrollView>
       </View> */}
       <FlatList
-        data={open}
+        data={carList}
         contentContainerStyle={styles.CardContainer}
         renderItem={renderItem}
         // keyExtractor={(item) => item.id}

@@ -1,4 +1,4 @@
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
@@ -15,7 +15,8 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import SelectList from "react-native-dropdown-select-list";
+import { showMessage } from "react-native-flash-message";
+// import SelectList from "react-native-dropdown-select-list";
 import SearchService from "../services/SearchService";
 
 //components
@@ -51,80 +52,7 @@ export default function UpdateProfile() {
   const [selectedCarName, setselectedCarName] = useState("");
   const [selectedCarSeat, setselectedCarSeat] = useState("");
 
-  const district = [
-    {
-      id: 1,
-      name: "dhaka",
-    },
-    {
-      id: 2,
-      name: "tangail",
-    },
-    {
-      id: 3,
-      name: "ghatail",
-      // toDis: [
-      //   {
-      //     id: 1,
-      //     toDistrict: "dhaka4",
-      //   },
-      //   {
-      //     id: 2,
-      //     toDistrict: "dhaka5",
-      //   },
-      //   {
-      //     id: 3,
-      //     toDistrict: "dhaka6",
-      //   },
-      // ],
-    },
-    {
-      id: 4,
-      name: "sunotia",
-    },
-    {
-      id: 5,
-      name: "fulhara",
-    },
-    {
-      id: 6,
-      name: "fulhara1",
-      // toDis: [
-      //   {
-      //     id: 1,
-      //     toDistrict: "dhaka1",
-      //   },
-      //   {
-      //     id: 2,
-      //     toDistrict: "dhaka2",
-      //   },
-      //   {
-      //     id: 3,
-      //     toDistrict: "dhaka3",
-      //   },
-      // ],
-    },
-    {
-      id: 7,
-      name: "fulhara2",
-    },
-  ];
-
-  const [name, setname] = useState([]);
-
-  const items = [
-    //name key is must.It is to show the text in front
-    { id: 1, name: "angellist" },
-    { id: 2, name: "codepen" },
-    { id: 3, name: "envelope" },
-    { id: 4, name: "etsy" },
-    { id: 5, name: "facebook" },
-    { id: 6, name: "foursquare" },
-    { id: 7, name: "github-alt" },
-    { id: 8, name: "github" },
-    { id: 9, name: "gitlab" },
-    { id: 10, name: "instagram" },
-  ];
+  // console.log(".......", selectedFromDistrict);
 
   useEffect(() => {
     SearchService.getCarList().then((res) => {
@@ -135,10 +63,10 @@ export default function UpdateProfile() {
   useEffect(() => {
     SearchService.getLocation().then((res) => {
       setfromdistrict(res?.data);
-      let newArray = res?.data?.map((item: any) => {
-        return { key: item?.districtId, value: item?.districtName };
-      });
-      setname(newArray);
+      // let newArray = res?.data?.map((item: any) => {
+      //   return { key: item?.districtId, value: item?.districtName };
+      // });
+
       settoDistrict(res?.data);
     });
   }, []);
@@ -154,23 +82,18 @@ export default function UpdateProfile() {
     let index = fromdistrict.findIndex((e: any) => e.districtId == id);
     setfromupazila(fromdistrict[index]?.upazila);
   };
-  // useEffect(() => {
-  const extra = async () => {
-    // console.log("........");
 
-    // setselectedFromupazila("");
-    // setselectedFromArea("");
-    let index = fromdistrict.findIndex(
-      (e: any) => e.districtId == selectedFromDistrict
-    );
-    let newArray = fromdistrict[index]?.upazila;
-    let array = newArray?.map((item: any) => {
-      return { key: item?.upazilaId, value: item?.upazilaName };
-    });
-    setfromupazila(array);
-  };
+  // const extra = async () => {
 
-  // });
+  //   let index = fromdistrict.findIndex(
+  //     (e: any) => e.districtId == selectedFromDistrict
+  //   );
+  //   let newArray = fromdistrict[index]?.upazila;
+  //   let array = newArray?.map((item: any) => {
+  //     return { key: item?.upazilaId, value: item?.upazilaName };
+  //   });
+  //   setfromupazila(array);
+  // };
 
   const getFromArea = async (id: any) => {
     setselectedFromArea("");
@@ -197,7 +120,41 @@ export default function UpdateProfile() {
     setseat(carName[index]?.carSeatNumber);
   };
 
-  console.log("............id", fromupazila);
+  const carSearch = async () => {
+    setloading(true);
+    const data = {
+      search_car_id: selectedCarName,
+      search_car_seat_id: selectedCarSeat ? selectedCarSeat : "",
+      search_rent_form: minimumRent,
+      search_rent_to: maximumRent,
+      search_form_district: selectedFromDistrict,
+      search_form_upazila: selectedFromupazila,
+      search_form_area: selectedFromArea,
+      search_to_district: selectedToDistrict,
+      search_to_upazila: selectedToupazila,
+      search_to_area: selectedToArea,
+    };
+
+    // console.log(".........data", data);
+
+    try {
+      let res = await SearchService.carFilter(data);
+      // console.log(".......res", res);
+      if (res?.data.length > 0) {
+        navigation.navigate("AvailableCar", { carList: res?.data });
+        setloading(false);
+      } else {
+        showMessage({
+          message: `No Car found`,
+          type: "warning",
+        });
+        setloading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setloading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -257,7 +214,7 @@ export default function UpdateProfile() {
               </Picker>
             </View>
           </View>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          {/* <View style={{ flexDirection: "row", alignItems: "center" }}>
             <View>
               <Text>From District</Text>
               <SelectList
@@ -286,7 +243,7 @@ export default function UpdateProfile() {
                 boxStyles={styles.picker2} //override default styles
               />
             </View>
-          </View>
+          </View> */}
           <View>
             <Text>Car Seat</Text>
             <View style={styles.picker1}>
@@ -327,7 +284,7 @@ export default function UpdateProfile() {
                 style={styles.input1}
                 onChangeText={setminimumRent}
                 value={minimumRent}
-                placeholder={"Car Seat"}
+                placeholder={"From Rent"}
               />
             </View>
             <View style={{ marginLeft: 10 }}>
@@ -338,7 +295,7 @@ export default function UpdateProfile() {
                 style={styles.input1}
                 onChangeText={setmaximumRent}
                 value={maximumRent}
-                placeholder={"Car Rent"}
+                placeholder={"To Rent"}
               />
             </View>
           </View>
@@ -486,9 +443,7 @@ export default function UpdateProfile() {
           </View>
           <View style={{ alignItems: "center", marginTop: 10 }}>
             <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("AvailableCar", { data: district })
-              }
+              onPress={() => carSearch()}
               style={styles.loginBtn}
             >
               {loading ? (

@@ -2,9 +2,10 @@ import {
   AntDesign,
   Entypo,
   FontAwesome,
+  FontAwesome5,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -30,6 +31,19 @@ const deviceHeight = Dimensions.get("window").height;
 export default function HomeScreen(props: any) {
   const navigation = useNavigation<any>();
   const scheme = useColorScheme();
+  const route = useRoute();
+  const {
+    carName,
+    carSeat,
+    photo,
+    fromDistrict,
+    fromUpazila,
+    fromArea,
+    toDistrict,
+    toUpazila,
+    toArea,
+    carRent,
+  }: any = route.params;
 
   const [loading, setloading] = useState(false);
   const [ModalOpen, setModalOpen] = useState(false);
@@ -118,9 +132,9 @@ export default function HomeScreen(props: any) {
             >
               <View style={{ marginBottom: 10 }}>
                 <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                  Marcedes
+                  {carName}
                 </Text>
-                <Text style={{ fontSize: 14, color: "#1239" }}>Benz A 120</Text>
+                {/* <Text style={{ fontSize: 14, color: "#1239" }}>Benz A 120</Text> */}
                 <View
                   style={{
                     display: "flex",
@@ -137,7 +151,10 @@ export default function HomeScreen(props: any) {
                   />
                 </View>
                 <Text style={{ fontSize: 16, color: "#1239" }}>
-                  Mohammodpur, Dhaka, Bangladesh
+                  From: {fromArea}, {fromUpazila}, {fromDistrict}
+                </Text>
+                <Text style={{ fontSize: 16, color: "#1239" }}>
+                  To: {toArea}, {toUpazila}, {toDistrict}
                 </Text>
                 <Text style={{ fontSize: 17, color: "#004C3F" }}>
                   Insured During The Rental Period
@@ -154,9 +171,9 @@ export default function HomeScreen(props: any) {
                 <Text
                   style={{ fontSize: 18, color: "#004C3F", fontWeight: "bold" }}
                 >
-                  Tk 300
+                  Tk {carRent}
                 </Text>
-                <Text style={{ fontSize: 16, color: "#1239" }}>Per Day</Text>
+                {/* <Text style={{ fontSize: 16, color: "#1239" }}>Per Day</Text> */}
               </View>
             </View>
             <View
@@ -194,7 +211,7 @@ export default function HomeScreen(props: any) {
               </TouchableOpacity>
             </View>
             <View style={{ paddingVertical: 10 }}>
-              <Text style={{ fontSize: 22, fontWeight: "bold" }}>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                 Car Specification
               </Text>
               <View
@@ -203,6 +220,7 @@ export default function HomeScreen(props: any) {
                   alignItems: "center",
                   justifyContent: "space-around",
                   paddingVertical: 5,
+                  // borderBottomWidth: 0.5,
                 }}
               >
                 <View style={{ alignItems: "center" }}>
@@ -211,84 +229,34 @@ export default function HomeScreen(props: any) {
                     size={25}
                     color="#004C3F"
                   />
-                  <Text>5 Seats</Text>
+                  <Text>{carSeat} Seats</Text>
                 </View>
                 <View style={{ alignItems: "center" }}>
+                  <FontAwesome5 name="gas-pump" size={20} color={"#004C3F"} />
+                  <Text>Petrol</Text>
+                </View>
+                <View style={{ alignItems: "center" }}>
+                  <AntDesign name="barschart" size={20} color={"#004C3F"} />
+                  <Text>Auto</Text>
+                </View>
+                {/* <View style={{ alignItems: "center" }}>
                   <MaterialCommunityIcons
                     name="seat"
                     size={25}
                     color="#004C3F"
                   />
                   <Text>5 Seats</Text>
-                </View>
-                <View style={{ alignItems: "center" }}>
-                  <MaterialCommunityIcons
-                    name="seat"
-                    size={25}
-                    color="#004C3F"
-                  />
-                  <Text>5 Seats</Text>
-                </View>
-                <View style={{ alignItems: "center" }}>
-                  <MaterialCommunityIcons
-                    name="seat"
-                    size={25}
-                    color="#004C3F"
-                  />
-                  <Text>5 Seats</Text>
-                </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-around",
-                  paddingVertical: 10,
-                  borderBottomWidth: 0.5,
-                }}
-              >
-                <View style={{ alignItems: "center" }}>
-                  <MaterialCommunityIcons
-                    name="seat"
-                    size={25}
-                    color="#004C3F"
-                  />
-                  <Text>5 Seats</Text>
-                </View>
-                <View style={{ alignItems: "center" }}>
-                  <MaterialCommunityIcons
-                    name="seat"
-                    size={25}
-                    color="#004C3F"
-                  />
-                  <Text>5 Seats</Text>
-                </View>
-                <View style={{ alignItems: "center" }}>
-                  <MaterialCommunityIcons
-                    name="seat"
-                    size={25}
-                    color="#004C3F"
-                  />
-                  <Text>5 Seats</Text>
-                </View>
-                <View style={{ alignItems: "center" }}>
-                  <MaterialCommunityIcons
-                    name="seat"
-                    size={25}
-                    color="#004C3F"
-                  />
-                  <Text>5 Seats</Text>
-                </View>
+                </View> */}
               </View>
             </View>
-            <View style={{ paddingVertical: 0 }}>
+            {/* <View style={{ paddingVertical: 0 }}>
               <Text style={{ fontSize: 22, fontWeight: "bold" }}>
                 Car Description
               </Text>
               <Text style={{ fontSize: 16 }}>
                 ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
               </Text>
-            </View>
+            </View> */}
           </View>
           <View style={{ alignItems: "center", marginTop: 10 }}>
             <TouchableOpacity

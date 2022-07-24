@@ -20,4 +20,12 @@ async function getCarList() {
   return res;
 }
 
-export default { getLocation, getCarSeat, getCarList };
+async function carFilter(data: any) {
+  const res = await request(`/customer/booking-search`, {
+    method: "POST",
+    data: data,
+  });
+  return res;
+}
+
+export default { getLocation, getCarSeat, getCarList, carFilter };

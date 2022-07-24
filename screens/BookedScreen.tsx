@@ -1,7 +1,7 @@
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import moment from "moment";
 import React, { useState } from "react";
 import {
@@ -26,6 +26,8 @@ const deviceHeight = Dimensions.get("window").height;
 export default function UpdateProfile() {
   const navigation = useNavigation<any>();
   const scheme = useColorScheme();
+  const route = useRoute();
+  const { carName }: any = route.params;
   const [getNotification, setgetNotification] = useState(false);
   const [name, setname] = useState("");
   const [carSeat, setcarSeat] = useState([]);
@@ -35,6 +37,8 @@ export default function UpdateProfile() {
   const [showTime, setshowTime] = useState(false);
   const [time, settime] = useState("");
   const [isActive, setisActive] = useState(false);
+
+  console.log("..........", carName);
 
   //selected state
   const [selectedDistrict, setselectedDistrict] = useState("");
