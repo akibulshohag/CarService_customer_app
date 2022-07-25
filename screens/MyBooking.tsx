@@ -1,6 +1,7 @@
 import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -10,6 +11,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
+import BookingService from "../services/BookingService";
 
 //components
 import MyBooking from "../components/MyBooking";
@@ -17,33 +19,38 @@ import MyBooking from "../components/MyBooking";
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
 
-export default function HomeScreen(props: any) {
+export default function HomeScreen() {
   const navigation = useNavigation<any>();
   const scheme = useColorScheme();
-
-  const [city, setcity] = useState("Inside City");
-  const [showDate, setshowDate] = useState(false);
-  const [date, setDate] = useState("");
-  const [loading, setloading] = useState(false);
-  const [datee, setDatee] = useState(new Date());
+  const isFocused = useIsFocused();
+  const [customerId, setcustomerId] = useState("");
   const [open, setOpen] = useState("123456789asdfgh");
+  const [bookingList, setbookingList] = useState([]);
 
-  const onChange = (event: any, selectedDate: any) => {
-    setshowDate(false);
-
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
-  };
+  useEffect(() => {
+    SecureStore.getItemAsync("customerId").then((res) => {
+      if (res) {
+        setcustomerId(res);
+      }
+    });
+  }, [isFocused]);
+  useEffect(() => {
+    BookingService.bookingList(customerId).then((res) => {
+      console.log("...............dd", res?.data);
+      setbookingList(res?.data);
+    });
+  }, [customerId, isFocused]);
 
   const renderItem = ({ item, index }: any) => {
     return (
       <View
+        key={index}
         style={{
           marginBottom: 10,
           // elevation: 5,
         }}
       >
-        <MyBooking />
+        <MyBooking bookingList={item} />
       </View>
     );
   };
@@ -93,15 +100,21 @@ export default function HomeScreen(props: any) {
           ))}
         </ScrollView>
       </View> */}
-      <FlatList
-        data={open}
-        contentContainerStyle={styles.CardContainer}
-        renderItem={renderItem}
-        // keyExtractor={(item) => item.id}
-        // ListFooterComponent={renderLoader}
-        onEndReached={loadMoreItem}
-        onEndReachedThreshold={0}
-      />
+      {bookingList?.length > 0 ? (
+        <FlatList
+          data={bookingList}
+          contentContainerStyle={styles.CardContainer}
+          renderItem={renderItem}
+          // keyExtractor={(item) => item.id}
+          // ListFooterComponent={renderLoader}
+          onEndReached={loadMoreItem}
+          onEndReachedThreshold={0}
+        />
+      ) : (
+        <View style={{ alignItems: "center", marginTop: deviceHeight / 2.5 }}>
+          <Text style={{ fontSize: 16, color: "red" }}>No booking yet</Text>
+        </View>
+      )}
     </View>
   );
 }

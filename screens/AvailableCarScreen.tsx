@@ -1,6 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useState } from "react";
+import React from "react";
 import {
   Dimensions,
   FlatList,
@@ -22,13 +22,6 @@ export default function HomeScreen(props: any) {
   const scheme = useColorScheme();
   const route = useRoute();
   const { carList }: any = route.params;
-
-  const [city, setcity] = useState("Inside City");
-  const [showDate, setshowDate] = useState(false);
-  const [date, setDate] = useState("");
-  const [loading, setloading] = useState(false);
-  const [datee, setDatee] = useState(new Date());
-  const [open, setOpen] = useState("20ddddddddddd");
 
   // console.log("............", carList);
 

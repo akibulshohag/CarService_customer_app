@@ -21,6 +21,7 @@ export default function ModalScreen({ setModalOpen, ModalOpen }: any) {
 
   const logOut = async () => {
     let token = await SecureStore.deleteItemAsync("token");
+    let Id = await SecureStore.deleteItemAsync("customerId");
     setToken("");
 
     if (token == null) {

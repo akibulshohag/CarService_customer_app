@@ -43,6 +43,14 @@ export default function HomeScreen(props: any) {
     toUpazila,
     toArea,
     carRent,
+    vendorId,
+    carId,
+    fromDistrictId,
+    fromUpazilaId,
+    fromAreaId,
+    toDistrictId,
+    toUpazilaId,
+    toAreaId,
   }: any = route.params;
 
   const [loading, setloading] = useState(false);
@@ -260,7 +268,19 @@ export default function HomeScreen(props: any) {
           </View>
           <View style={{ alignItems: "center", marginTop: 10 }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate("Booked")}
+              onPress={() =>
+                navigation.navigate("Booked", {
+                  vendorId: vendorId,
+                  carId: carId,
+                  fromDistrictId: fromDistrictId,
+                  fromUpazilaId: fromUpazilaId,
+                  fromAreaId: fromAreaId,
+                  toDistrictId: toDistrictId,
+                  toUpazilaId: toUpazilaId,
+                  toAreaId: toAreaId,
+                  carRent: carRent,
+                })
+              }
               style={styles.loginBtn}
             >
               {loading ? (

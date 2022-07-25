@@ -1,9 +1,9 @@
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Picker } from "@react-native-picker/picker";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -17,6 +17,8 @@ import {
   useColorScheme,
   View,
 } from "react-native";
+import { showMessage } from "react-native-flash-message";
+import BookingService from "../services/BookingService";
 
 //components
 
@@ -27,18 +29,29 @@ export default function UpdateProfile() {
   const navigation = useNavigation<any>();
   const scheme = useColorScheme();
   const route = useRoute();
-  const { carName }: any = route.params;
-  const [getNotification, setgetNotification] = useState(false);
-  const [name, setname] = useState("");
+  const {
+    vendorId,
+    carId,
+    fromDistrictId,
+    fromUpazilaId,
+    fromAreaId,
+    toDistrictId,
+    toUpazilaId,
+    toAreaId,
+    carRent,
+  }: any = route.params;
+
   const [carSeat, setcarSeat] = useState([]);
   const [loading, setloading] = useState(false);
   const [date, setDate] = useState("");
   const [showDate, setshowDate] = useState(false);
   const [showTime, setshowTime] = useState(false);
   const [time, settime] = useState("");
-  const [isActive, setisActive] = useState(false);
-
-  console.log("..........", carName);
+  const [isActive, setisActive] = useState("");
+  const [customerId, setcustomerId] = useState("");
+  const [phone, setphone] = useState("");
+  const [address, setaddress] = useState("");
+  const [note, setnote] = useState("");
 
   //selected state
   const [selectedDistrict, setselectedDistrict] = useState("");
@@ -57,10 +70,60 @@ export default function UpdateProfile() {
     settime(currentDate);
   };
 
-  var d = new Date().getTime();
-  // var n = d.getUTCHours();
+  useEffect(() => {
+    SecureStore.getItemAsync("customerId").then((res) => {
+      if (res) {
+        setcustomerId(res);
+      }
+    });
+  }, []);
 
-  console.log("...........fff", moment(time).format(" HH mm A"));
+  const carBooking = async () => {
+    SecureStore.getItemAsync("customerId").then((res) => {
+      if (res) {
+        setcustomerId(res);
+      }
+    });
+    // setloading(true);
+
+    const data = {
+      vendor_id: vendorId,
+      customer_id: Number(customerId),
+      round_trip: isActive,
+      car_id: carId,
+      form_district: fromDistrictId,
+      form_upazila: fromUpazilaId,
+      form_area: fromAreaId,
+      to_district: toDistrictId,
+      to_upazila: toUpazilaId,
+      to_area: toAreaId,
+      rent: carRent,
+      pick_up_phone: phone,
+      pick_up_date: moment(date).format("YYYY-MM-DD"),
+      pick_up_time: moment(time).format(" HH:mm:00 "),
+      pick_up_address: address,
+      note: note,
+    };
+    // console.log("............", data);
+
+    try {
+      let res = await BookingService.carBooking(data);
+
+      if (res?.status == "success") {
+        setloading(false);
+        showMessage({
+          message: `Car Booking Successful`,
+          type: "success",
+        });
+        navigation.navigate("TabNav");
+      } else {
+        alert("Phone & Address is Required");
+        setloading(false);
+      }
+    } catch (error) {
+      setloading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -97,7 +160,7 @@ export default function UpdateProfile() {
           </Text>
         </View>
         <View style={{ paddingHorizontal: 20 }}>
-          <View>
+          {/* <View>
             <Text>Customer</Text>
             <View style={styles.picker}>
               <Picker
@@ -109,22 +172,22 @@ export default function UpdateProfile() {
               >
                 <Picker.Item label="Select Customer" value={""} />
 
-                {/* {carSeat?.map((item: any, index) => ( */}
+                {carSeat?.map((item: any, index) => (
                 <Picker.Item
                   //   key={index}
                   label={`Dhaka`}
                   value={`Dhaka`}
                 />
-                {/* ))} */}
+                 ))} 
               </Picker>
             </View>
-          </View>
+          </View> */}
           <View style={{}}>
             <Text style={{ fontSize: 14, marginBottom: 5 }}>Pick Up Phone</Text>
             <TextInput
               style={styles.input}
-              onChangeText={setname}
-              value={name}
+              onChangeText={setphone}
+              value={phone}
               placeholder={"Phone Number"}
             />
           </View>
@@ -176,8 +239,8 @@ export default function UpdateProfile() {
             <Text style={{ fontSize: 14, marginBottom: 5 }}>Address</Text>
             <TextInput
               style={styles.input1}
-              onChangeText={setname}
-              value={name}
+              onChangeText={setaddress}
+              value={address}
               placeholder={"Enter Address"}
               numberOfLines={4}
             />
@@ -186,23 +249,23 @@ export default function UpdateProfile() {
             <Text style={{ fontSize: 14, marginBottom: 5 }}>Note</Text>
             <TextInput
               style={styles.input1}
-              onChangeText={setname}
-              value={name}
+              onChangeText={setnote}
+              value={note}
               placeholder={"Write Something"}
               numberOfLines={4}
             />
           </View>
 
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {!isActive ? (
+            {isActive == "" ? (
               <MaterialCommunityIcons
-                onPress={() => setisActive(true)}
+                onPress={() => setisActive("yes")}
                 name="checkbox-blank-outline"
                 size={20}
               />
             ) : (
               <MaterialCommunityIcons
-                onPress={() => setisActive(false)}
+                onPress={() => setisActive("")}
                 name="checkbox-marked"
                 size={20}
               />
@@ -211,7 +274,10 @@ export default function UpdateProfile() {
           </View>
 
           <View style={{ alignItems: "center", marginTop: 10 }}>
-            <TouchableOpacity style={styles.loginBtn}>
+            <TouchableOpacity
+              onPress={() => carBooking()}
+              style={styles.loginBtn}
+            >
               {loading ? (
                 <ActivityIndicator size={"small"} color="#fff" />
               ) : (
@@ -234,7 +300,7 @@ export default function UpdateProfile() {
             testID="dateTimePicker"
             value={new Date()}
             mode="time"
-            is24Hour={true}
+            // is24Hour={true}
             display="default"
             onChange={onChangeTime}
           />

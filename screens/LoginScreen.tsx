@@ -134,6 +134,10 @@ export default function LoginScreen() {
           setOtpCode("");
           setprofile(res?.data?.user);
           SecureStore.setItemAsync("token", res?.data?.access_token);
+          SecureStore.setItemAsync(
+            "customerId",
+            res?.data?.user?.id.toString()
+          );
           navigation.navigate("TabNav");
         } else {
           showMessage({

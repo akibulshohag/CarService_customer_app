@@ -27,7 +27,7 @@ export default function TabOneScreen({ carList }: any) {
 
   const [loading, setloading] = useState(false);
 
-  // console.log("...........dd", carList);
+  // console.log("...........ddd", carList?.form_district_id);
 
   return (
     <>
@@ -47,6 +47,14 @@ export default function TabOneScreen({ carList }: any) {
             toArea: carList?.to_area,
             photo: carList?.picture,
             carRent: carList?.rent,
+            vendorId: carList?.vendor_id,
+            carId: carList?.car_id,
+            fromDistrictId: carList?.form_district_id,
+            fromUpazilaId: carList?.form_upazila_id,
+            fromAreaId: carList?.form_area_id,
+            toDistrictId: carList?.to_district_id,
+            toUpazilaId: carList?.to_upazila_id,
+            toAreaId: carList?.to_area_id,
           })
         }
         style={styles.card}
@@ -157,7 +165,17 @@ export default function TabOneScreen({ carList }: any) {
           <TouchableOpacity
             style={styles.loginBtn}
             onPress={() =>
-              navigation.navigate("Booked", { carName: carList?.rent })
+              navigation.navigate("Booked", {
+                vendorId: carList?.vendor_id,
+                carId: carList?.car_id,
+                fromDistrictId: carList?.form_district_id,
+                fromUpazilaId: carList?.form_upazila_id,
+                fromAreaId: carList?.form_area_id,
+                toDistrictId: carList?.to_district_id,
+                toUpazilaId: carList?.to_upazila_id,
+                toAreaId: carList?.to_area_id,
+                carRent: carList?.rent,
+              })
             }
           >
             {loading ? (
