@@ -3,6 +3,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   FlatList,
   StatusBar,
@@ -11,10 +12,10 @@ import {
   useColorScheme,
   View,
 } from "react-native";
+import MyBooking from "../components/MyBooking";
 import BookingService from "../services/BookingService";
 
 //components
-import MyBooking from "../components/MyBooking";
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
@@ -24,8 +25,9 @@ export default function HomeScreen() {
   const scheme = useColorScheme();
   const isFocused = useIsFocused();
   const [customerId, setcustomerId] = useState("");
-  const [open, setOpen] = useState("123456789asdfgh");
   const [bookingList, setbookingList] = useState([]);
+  const [isLoading, setisLoading] = useState(true);
+  const [renderMe, setrenderMe] = useState(false);
 
   useEffect(() => {
     SecureStore.getItemAsync("customerId").then((res) => {
@@ -36,26 +38,41 @@ export default function HomeScreen() {
   }, [isFocused]);
   useEffect(() => {
     BookingService.bookingList(customerId).then((res) => {
-      console.log("...............dd", res?.data);
-      setbookingList(res?.data);
+      // console.log("........res", res);
+
+      if (res) {
+        setbookingList(res?.data);
+        setisLoading(false);
+        setrenderMe(renderMe);
+      } else {
+        setisLoading(false);
+      }
     });
-  }, [customerId, isFocused]);
+  }, [customerId, isFocused, !renderMe]);
 
   const renderItem = ({ item, index }: any) => {
     return (
-      <View
-        key={index}
-        style={{
-          marginBottom: 10,
-          // elevation: 5,
-        }}
-      >
-        <MyBooking bookingList={item} />
-      </View>
+      <>
+        <View
+          key={index}
+          style={{
+            marginBottom: 10,
+          }}
+        >
+          <MyBooking bookingList={item} />
+        </View>
+      </>
     );
   };
 
   const loadMoreItem = () => {};
+  const renderLoader = () => {
+    return isLoading ? (
+      <View>
+        <ActivityIndicator size="small" color="#FF9411" />
+      </View>
+    ) : null;
+  };
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={`black`} />
@@ -100,19 +117,30 @@ export default function HomeScreen() {
           ))}
         </ScrollView>
       </View> */}
-      {bookingList?.length > 0 ? (
-        <FlatList
-          data={bookingList}
-          contentContainerStyle={styles.CardContainer}
-          renderItem={renderItem}
-          // keyExtractor={(item) => item.id}
-          // ListFooterComponent={renderLoader}
-          onEndReached={loadMoreItem}
-          onEndReachedThreshold={0}
-        />
+
+      {!isLoading ? (
+        <View>
+          {bookingList?.length > 0 ? (
+            <FlatList
+              data={bookingList}
+              contentContainerStyle={styles.CardContainer}
+              renderItem={renderItem}
+              // keyExtractor={(item) => item.id}
+              // ListFooterComponent={renderLoader}
+              onEndReached={loadMoreItem}
+              onEndReachedThreshold={0}
+            />
+          ) : (
+            <View
+              style={{ alignItems: "center", marginTop: deviceHeight / 2.5 }}
+            >
+              {isLoading == false ? <Text>No Booking Yet</Text> : null}
+            </View>
+          )}
+        </View>
       ) : (
-        <View style={{ alignItems: "center", marginTop: deviceHeight / 2.5 }}>
-          <Text style={{ fontSize: 16, color: "red" }}>No booking yet</Text>
+        <View>
+          <ActivityIndicator size="small" color="#FF9411" />
         </View>
       )}
     </View>
@@ -122,6 +150,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 40,
     // alignItems: "center",
   },
   headerContainer: {

@@ -1,8 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
+import { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   Dimensions,
   Image,
   StyleSheet,
@@ -20,32 +20,61 @@ const deviceHeight = Dimensions.get("window").height;
 export default function TabOneScreen({ bookingList }: any) {
   const navigation = useNavigation<any>();
   const scheme = useColorScheme();
+  const isFocused = useIsFocused();
 
   const [loading, setloading] = useState(false);
+  const [renderme, setrenderme] = useState(true);
+  const [customerId, setcustomerId] = useState("");
 
-  // console.log(".........", bookingList);
+  useEffect(() => {
+    SecureStore.getItemAsync("customerId").then((res) => {
+      if (res) {
+        setcustomerId(res);
+      }
+    });
+  }, [isFocused]);
 
   const Delete = async () => {
     const data = {
       booking_id: bookingList?.bookingId,
     };
-    console.log(".........data", data);
 
     try {
       let res = await BookingService.bookingDelete(data);
-      console.log("............delete", res);
-      showMessage({
-        message: `Deleted`,
-        type: "warning",
-      });
+      // console.log("............res", res);
+
+      if (res) {
+        BookingService.bookingList(customerId).then((res) => {
+          console.log("........res", res);
+        });
+        showMessage({
+          message: `Deleted`,
+          type: "success",
+        });
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
+  useEffect(() => {
+    // console.log("........", bookingList);
+
+    bookingList;
+  }, [isFocused]);
+
+  // console.log(".............", bookingList);
+
   return (
     <>
-      <TouchableOpacity style={styles.card}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("BookingDetails", {
+            bookingDetails: bookingList,
+          })
+        }
+        style={styles.card}
+      >
         <View
           style={{
             display: "flex",
@@ -99,10 +128,17 @@ export default function TabOneScreen({ bookingList }: any) {
               // backgroundColor: "red",
             }}
           >
-            <Image
-              style={styles.img}
-              source={require("../assets/car/car5.png")}
-            ></Image>
+            {bookingList?.avatar ? (
+              <Image
+                style={styles.img}
+                source={{ uri: `${bookingList?.avatar}` }}
+              ></Image>
+            ) : (
+              <Image
+                style={styles.img}
+                source={require("../assets/car/car5.png")}
+              ></Image>
+            )}
           </View>
         </View>
         <View
@@ -115,25 +151,25 @@ export default function TabOneScreen({ bookingList }: any) {
         >
           <View>
             <Text style={{ fontSize: 16, color: "#1239" }}>
-              Booking Status: <Text style={{ color: "red" }}>Pending</Text>
+              Booking Status:{" "}
+              <Text style={{ color: "red" }}>{bookingList?.bookingStatus}</Text>
             </Text>
             <Text style={{ fontSize: 20, color: "#004C3F" }}>
               TK {bookingList?.rent}
             </Text>
           </View>
-          {bookingList?.bookingStatus == "Pending" ? (
-            <TouchableOpacity style={styles.loginBtn} onPress={() => Delete()}>
+          {/* {bookingList?.bookingStatus == "Pending" ? (
+            <TouchableOpacity style={styles.loginBtn}>
               {loading ? (
                 <ActivityIndicator size={"small"} color="#fff" />
               ) : (
-                <Text
-                  style={{ fontSize: 20, color: "#004C3F", fontWeight: "bold" }}
-                >
-                  Delete
-                </Text>
+                <Image
+                  style={{ width: 30, height: 25 }}
+                  source={require("../assets/fonts/editing.png")}
+                ></Image>
               )}
             </TouchableOpacity>
-          ) : null}
+          ) : null} */}
         </View>
       </TouchableOpacity>
     </>

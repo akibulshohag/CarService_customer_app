@@ -28,6 +28,7 @@ export default function TabOneScreen({ carList }: any) {
   const [loading, setloading] = useState(false);
 
   // console.log("...........ddd", carList?.form_district_id);
+  // console.log("............", carList);
 
   return (
     <>
@@ -55,6 +56,8 @@ export default function TabOneScreen({ carList }: any) {
             toDistrictId: carList?.to_district_id,
             toUpazilaId: carList?.to_upazila_id,
             toAreaId: carList?.to_area_id,
+
+            modelNumber: carList?.model_number,
           })
         }
         style={styles.card}

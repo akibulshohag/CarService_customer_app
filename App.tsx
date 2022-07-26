@@ -15,6 +15,7 @@ import "react-native-gesture-handler";
 import { TabNav } from "./navigation/TabNavigator";
 import AvailableCar from "./screens/AvailableCarScreen";
 import Booked from "./screens/BookedScreen";
+import BookingDetails from "./screens/BookingDetails";
 import BookSummary from "./screens/BookSummaryScreen";
 import CarDetails from "./screens/CarDetailsScreen";
 import ConfirmOrder from "./screens/ConfirmOrderScreen";
@@ -164,6 +165,11 @@ export default function App() {
               <Stack.Screen
                 name="Booked"
                 component={Booked}
+                options={{ header: () => null }}
+              />
+              <Stack.Screen
+                name="BookingDetails"
+                component={BookingDetails}
                 options={{ header: () => null }}
               />
             </Stack.Navigator>

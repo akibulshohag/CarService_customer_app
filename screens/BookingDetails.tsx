@@ -1,6 +1,7 @@
 import {
   AntDesign,
   Entypo,
+  FontAwesome,
   FontAwesome5,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
@@ -31,34 +32,15 @@ export default function HomeScreen(props: any) {
   const navigation = useNavigation<any>();
   const scheme = useColorScheme();
   const route = useRoute();
-  const {
-    carName,
-    carSeat,
-    photo,
-    fromDistrict,
-    fromUpazila,
-    fromArea,
-    toDistrict,
-    toUpazila,
-    toArea,
-    carRent,
-    vendorId,
-    carId,
-    fromDistrictId,
-    fromUpazilaId,
-    fromAreaId,
-    toDistrictId,
-    toUpazilaId,
-    toAreaId,
+  const { bookingDetails }: any = route.params;
 
-    modelNumber,
-  }: any = route.params;
+  console.log("...........details", bookingDetails);
 
   const [loading, setloading] = useState(false);
   const [ModalOpen, setModalOpen] = useState(false);
 
   const phoneCall = () => {
-    Linking.openURL(`tel: 01867473587`);
+    Linking.openURL(`tel: ${bookingDetails?.bookingSchedule[0]?.driverPhone}`);
     // console.log("............clicked");
   };
 
@@ -80,7 +62,7 @@ export default function HomeScreen(props: any) {
             color={"black"}
           ></AntDesign>
           <Text style={{ fontSize: 18, fontWeight: "bold", marginLeft: 10 }}>
-            Car Details
+            Booking Details
           </Text>
         </View>
       </View>
@@ -95,13 +77,11 @@ export default function HomeScreen(props: any) {
               }}
             >
               <View style={{}}>
-                {photo ? (
+                {bookingDetails?.avatar ? (
                   <Image
                     style={styles.firstImage}
-                    source={{
-                      uri: `${photo}`,
-                    }}
-                  />
+                    source={{ uri: `${bookingDetails?.avatar}` }}
+                  ></Image>
                 ) : (
                   <Image
                     style={styles.firstImage}
@@ -150,11 +130,12 @@ export default function HomeScreen(props: any) {
             >
               <View style={{ marginBottom: 10 }}>
                 <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                  {carName}
+                  {bookingDetails?.carName}
                 </Text>
-                <Text style={{ fontSize: 14, color: "#1239" }}>
-                  Model: {modelNumber}
+                <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                  Tk {bookingDetails?.rent}
                 </Text>
+                {/* <Text style={{ fontSize: 14, color: "#1239" }}>Benz A 120</Text> */}
                 <View
                   style={{
                     display: "flex",
@@ -171,65 +152,69 @@ export default function HomeScreen(props: any) {
                   />
                 </View>
                 <Text style={{ fontSize: 16, color: "#1239" }}>
-                  From: {fromArea}, {fromUpazila}, {fromDistrict}
+                  From: {bookingDetails?.formArea},{" "}
+                  {bookingDetails?.formUpazila}, {bookingDetails?.formDistrict}
                 </Text>
                 <Text style={{ fontSize: 16, color: "#1239" }}>
-                  To: {toArea}, {toUpazila}, {toDistrict}
+                  To: {bookingDetails?.toArea}, {bookingDetails?.toUpazila},{" "}
+                  {bookingDetails?.toDistrict}{" "}
                 </Text>
-                <Text style={{ fontSize: 17, color: "#004C3F" }}>
-                  Insured During The Rental Period
+                <Text style={{ fontSize: 17, color: "#000" }}>
+                  Pick Up Address: {bookingDetails?.pickUpAddress}
                 </Text>
-                {/* <TouchableOpacity onPress={() => setModalOpen(true)}>
+                <TouchableOpacity onPress={() => setModalOpen(true)}>
                   <Text
                     style={{ fontSize: 17, color: "#004C3F", marginTop: 5 }}
                   >
                     Drop Tour Review
                   </Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
               </View>
               <View>
                 <Text
                   style={{ fontSize: 18, color: "#004C3F", fontWeight: "bold" }}
                 >
-                  Tk {carRent}
+                  Tk
                 </Text>
                 {/* <Text style={{ fontSize: 16, color: "#1239" }}>Per Day</Text> */}
               </View>
             </View>
-            {/* <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                paddingVertical: 15,
-                borderBottomWidth: 0.5,
-              }}
-            >
+            {bookingDetails?.bookingSchedule?.length > 0 ? (
               <View
                 style={{
-                  display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
+                  justifyContent: "space-between",
+                  paddingVertical: 15,
+                  borderBottomWidth: 0.5,
                 }}
               >
-                <Image
-                  style={styles.img}
-                  source={require("../assets/car/carraod.jpg")}
-                ></Image>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Image
+                    style={styles.img}
+                    source={require("../assets/car/carraod.jpg")}
+                  ></Image>
 
-                <View style={{ marginLeft: 10 }}>
-                  <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                    <Text style={{ color: "#004C3F", fontSize: 18 }}>
-                      Owner-
+                  <View style={{ marginLeft: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                      <Text style={{ color: "#004C3F", fontSize: 18 }}>
+                        Driver-
+                      </Text>
+                      {bookingDetails?.bookingSchedule[0]?.driverName}
                     </Text>
-                    Cristiano Ronaldo
-                  </Text>
+                  </View>
                 </View>
+                <TouchableOpacity onPress={() => phoneCall()}>
+                  <FontAwesome name="phone-square" size={40} color="#004C3F" />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity onPress={() => phoneCall()}>
-                <FontAwesome name="phone-square" size={40} color="#004C3F" />
-              </TouchableOpacity>
-            </View> */}
+            ) : null}
             <View style={{ paddingVertical: 10 }}>
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                 Car Specification
@@ -249,7 +234,7 @@ export default function HomeScreen(props: any) {
                     size={25}
                     color="#004C3F"
                   />
-                  <Text>{carSeat} Seats</Text>
+                  <Text>{bookingDetails?.carSeat} Seats</Text>
                 </View>
                 <View style={{ alignItems: "center" }}>
                   <FontAwesome5 name="gas-pump" size={20} color={"#004C3F"} />
@@ -260,41 +245,26 @@ export default function HomeScreen(props: any) {
                   <Text>Auto</Text>
                 </View>
                 {/* <View style={{ alignItems: "center" }}>
-                  <MaterialCommunityIcons
-                    name="seat"
-                    size={25}
-                    color="#004C3F"
-                  />
-                  <Text>5 Seats</Text>
-                </View> */}
+                    <MaterialCommunityIcons
+                      name="seat"
+                      size={25}
+                      color="#004C3F"
+                    />
+                    <Text>5 Seats</Text>
+                  </View> */}
               </View>
             </View>
             {/* <View style={{ paddingVertical: 0 }}>
-              <Text style={{ fontSize: 22, fontWeight: "bold" }}>
-                Car Description
-              </Text>
-              <Text style={{ fontSize: 16 }}>
-                ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-              </Text>
-            </View> */}
+                <Text style={{ fontSize: 22, fontWeight: "bold" }}>
+                  Car Description
+                </Text>
+                <Text style={{ fontSize: 16 }}>
+                  ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+                </Text>
+              </View> */}
           </View>
           <View style={{ alignItems: "center", marginTop: 10 }}>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Booked", {
-                  vendorId: vendorId,
-                  carId: carId,
-                  fromDistrictId: fromDistrictId,
-                  fromUpazilaId: fromUpazilaId,
-                  fromAreaId: fromAreaId,
-                  toDistrictId: toDistrictId,
-                  toUpazilaId: toUpazilaId,
-                  toAreaId: toAreaId,
-                  carRent: carRent,
-                })
-              }
-              style={styles.loginBtn}
-            >
+            <TouchableOpacity style={styles.loginBtn}>
               {loading ? (
                 <ActivityIndicator size={"small"} color="#fff" />
               ) : (
@@ -337,7 +307,7 @@ const styles = StyleSheet.create({
     borderColor: "#1239",
   },
   firstImage: {
-    width: deviceWidth / 1.1,
+    width: deviceWidth / 1.1 - 10,
     height: 180,
     resizeMode: "contain",
     borderWidth: 0.01,

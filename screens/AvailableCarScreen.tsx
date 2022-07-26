@@ -23,7 +23,7 @@ export default function HomeScreen(props: any) {
   const route = useRoute();
   const { carList }: any = route.params;
 
-  // console.log("............", carList);
+  console.log("............", carList);
 
   const renderItem = ({ item, index }: any) => {
     return (
