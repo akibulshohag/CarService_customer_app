@@ -1,6 +1,6 @@
 import { Entypo, Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import React from "react";
 import {
   Dimensions,
   SafeAreaView,
@@ -20,7 +20,10 @@ const deviceHeight = Dimensions.get("window").height;
 export default function BookSummary() {
   const navigation = useNavigation<any>();
   const scheme = useColorScheme();
-  const [getNotification, setgetNotification] = useState(false);
+  const route = useRoute();
+  const { carName, fromArea, time, date, carRent, address }: any = route.params;
+
+  // console.log("............", carName);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,7 +39,7 @@ export default function BookSummary() {
           Booked Successfully
         </Text>
         <Text style={{ color: "#1239" }}>
-          You've booked Marcedes Benz W176 successfully
+          You've booked {carName} successfully
         </Text>
         <Text style={{ color: "#1239" }}>
           Go to my booking for more booking details
@@ -57,20 +60,20 @@ export default function BookSummary() {
           </View>
           <View style={{ paddingVertical: 10 }}>
             <Text style={{ fontSize: 14, color: "#1239" }}>Car</Text>
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>Marcedes</Text>
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>{carName}</Text>
           </View>
           <View style={{ marginBottom: 5 }}>
             <Text style={{ fontSize: 14, color: "#1239" }}>
-              Pick Up and Returns
+              Pick Up Address
             </Text>
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-              Washington Menchester - Same Location
+              {address}, {fromArea}
             </Text>
           </View>
           <View style={{ marginBottom: 5 }}>
             <Text style={{ fontSize: 14, color: "#1239" }}>Trip Dates</Text>
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-              12 April, 2022 - 14 April, 2022
+              {date}, {time}
             </Text>
           </View>
           <View style={{ paddingHorizontal: 10 }}>
@@ -91,12 +94,12 @@ export default function BookSummary() {
                   justifyContent: "space-between",
                 }}
               >
-                <Text style={{ fontSize: 16, color: "#1239" }}>
-                  One Day Rent
+                <Text style={{ fontSize: 16, color: "#1239" }}>Trip 1</Text>
+                <Text style={{ fontSize: 16, color: "#004C3F" }}>
+                  Tk {carRent}
                 </Text>
-                <Text style={{ fontSize: 16, color: "#004C3F" }}>Tk 2000</Text>
               </View>
-              <View
+              {/* <View
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
@@ -106,7 +109,7 @@ export default function BookSummary() {
                   One Day Rent
                 </Text>
                 <Text style={{ fontSize: 16, color: "#004C3F" }}>Tk 2000</Text>
-              </View>
+              </View> */}
               <View
                 style={{
                   flexDirection: "row",
@@ -117,16 +120,26 @@ export default function BookSummary() {
                 <Text style={{ fontSize: 16, color: "#004C3F" }}>
                   Total Fees
                 </Text>
-                <Text style={{ fontSize: 16, color: "#004C3F" }}>Tk 2000</Text>
+                <Text style={{ fontSize: 16, color: "#004C3F" }}>
+                  Tk {carRent}
+                </Text>
               </View>
             </View>
           </View>
         </View>
         <TouchableOpacity
+          style={{ marginTop: 20 }}
           onPress={() => navigation.navigate("TabNav")}
-          style={styles.loginBtn}
         >
-          <Text style={{ fontSize: 18, color: "#fff" }}>Back To Home</Text>
+          <Text
+            style={{
+              fontSize: 18,
+              color: "#004C3F",
+              textDecorationLine: "underline",
+            }}
+          >
+            Back To Home
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

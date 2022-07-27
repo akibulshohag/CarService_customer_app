@@ -21,6 +21,7 @@ import {
   View,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import StepIndicator from "react-native-step-indicator";
 
 //components
 import ReviewModal from "../components/ReviewModal";
@@ -34,7 +35,7 @@ export default function HomeScreen(props: any) {
   const route = useRoute();
   const { bookingDetails }: any = route.params;
 
-  console.log("...........details", bookingDetails);
+  // console.log("...........details", bookingDetails);
 
   const [loading, setloading] = useState(false);
   const [ModalOpen, setModalOpen] = useState(false);
@@ -42,6 +43,32 @@ export default function HomeScreen(props: any) {
   const phoneCall = () => {
     Linking.openURL(`tel: ${bookingDetails?.bookingSchedule[0]?.driverPhone}`);
     // console.log("............clicked");
+  };
+
+  let labels = ["Pending", "Cancel", "Approved"];
+
+  const customStyles = {
+    stepIndicatorSize: 25,
+    currentStepIndicatorSize: 30,
+    separatorStrokeWidth: 2,
+    currentStepStrokeWidth: 2,
+    stepStrokeCurrentColor: "#ec1d25",
+    stepStrokeWidth: 2,
+    stepStrokeFinishedColor: "#ec1d25",
+    stepStrokeUnFinishedColor: "#aaaaaa",
+    separatorFinishedColor: "#ec1d25",
+    separatorUnFinishedColor: "#aaaaaa",
+    stepIndicatorFinishedColor: "#ec1d25",
+    stepIndicatorUnFinishedColor: "#ffffff",
+    stepIndicatorCurrentColor: "#ffffff",
+    stepIndicatorLabelFontSize: 13,
+    currentStepIndicatorLabelFontSize: 13,
+    stepIndicatorLabelCurrentColor: "#ec1d25",
+    stepIndicatorLabelFinishedColor: "#ffffff",
+    stepIndicatorLabelUnFinishedColor: "#aaaaaa",
+    labelColor: "#999999",
+    labelSize: 14,
+    currentStepLabelColor: "#ec1d25",
   };
 
   return (
@@ -162,22 +189,49 @@ export default function HomeScreen(props: any) {
                 <Text style={{ fontSize: 17, color: "#000" }}>
                   Pick Up Address: {bookingDetails?.pickUpAddress}
                 </Text>
+
                 <TouchableOpacity onPress={() => setModalOpen(true)}>
                   <Text
                     style={{ fontSize: 17, color: "#004C3F", marginTop: 5 }}
                   >
-                    Drop Tour Review
+                    Drop Your Review
                   </Text>
                 </TouchableOpacity>
+                <View style={{ marginTop: 10 }}>
+                  <Text
+                    style={{
+                      color: "#000",
+                      marginBottom: 5,
+                      fontSize: 18,
+                      fontWeight: "600",
+                    }}
+                  >
+                    Booking Status
+                  </Text>
+                  <View style={{ width: 300 }}>
+                    <StepIndicator
+                      stepCount={3}
+                      customStyles={customStyles}
+                      currentPosition={
+                        bookingDetails?.bookingStatus == "Pending"
+                          ? 0
+                          : bookingDetails?.bookingStatus == "Reject"
+                          ? 1
+                          : 2
+                      }
+                      labels={labels}
+                    />
+                  </View>
+                </View>
               </View>
-              <View>
+              {/* <View>
                 <Text
                   style={{ fontSize: 18, color: "#004C3F", fontWeight: "bold" }}
                 >
                   Tk
                 </Text>
-                {/* <Text style={{ fontSize: 16, color: "#1239" }}>Per Day</Text> */}
-              </View>
+                <Text style={{ fontSize: 16, color: "#1239" }}>Per Day</Text>
+              </View> */}
             </View>
             {bookingDetails?.bookingSchedule?.length > 0 ? (
               <View
@@ -213,6 +267,70 @@ export default function HomeScreen(props: any) {
                 <TouchableOpacity onPress={() => phoneCall()}>
                   <FontAwesome name="phone-square" size={40} color="#004C3F" />
                 </TouchableOpacity>
+              </View>
+            ) : null}
+            {bookingDetails?.bookingSchedule?.length > 0 ? (
+              <View style={{ paddingVertical: 10, borderBottomWidth: 0.5 }}>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  Booking Schedule
+                </Text>
+                {bookingDetails?.bookingSchedule?.map(
+                  (item: any, index: number) => (
+                    <View key={index}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "600",
+                          color: "#1239",
+                        }}
+                      >
+                        Trip:{" "}
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "#004C3F",
+                          }}
+                        >
+                          {item?.trip}
+                        </Text>
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          paddingVertical: 5,
+                        }}
+                      >
+                        <View style={{}}>
+                          <Text style={{ fontSize: 16, color: "#1239" }}>
+                            Date
+                          </Text>
+                          <Text style={{ fontSize: 16, color: "#004C3F" }}>
+                            {item?.date}
+                          </Text>
+                        </View>
+                        <View style={{}}>
+                          <Text style={{ fontSize: 16, color: "#1239" }}>
+                            Pick Time
+                          </Text>
+                          <Text style={{ fontSize: 16, color: "#004C3F" }}>
+                            {item?.pickTime}
+                          </Text>
+                        </View>
+                        <View style={{}}>
+                          <Text style={{ fontSize: 16, color: "#1239" }}>
+                            Drop Time
+                          </Text>
+                          <Text style={{ fontSize: 16, color: "#004C3F" }}>
+                            {item?.dropTime}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  )
+                )}
               </View>
             ) : null}
             <View style={{ paddingVertical: 10 }}>

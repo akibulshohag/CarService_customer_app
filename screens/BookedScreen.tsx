@@ -39,7 +39,11 @@ export default function UpdateProfile() {
     toUpazilaId,
     toAreaId,
     carRent,
+    carName,
+    fromArea,
   }: any = route.params;
+
+  console.log("..........", fromArea);
 
   const [carSeat, setcarSeat] = useState([]);
   const [loading, setloading] = useState(false);
@@ -115,7 +119,14 @@ export default function UpdateProfile() {
           message: `Car Booking Successful`,
           type: "success",
         });
-        navigation.navigate("TabNav");
+        navigation.navigate("BookSummary", {
+          carName: carName,
+          fromArea: fromArea,
+          time: moment(time).format(" HH:mm:00 "),
+          date: moment(date).format("YYYY-MM-DD"),
+          carRent: carRent,
+          address: address,
+        });
       } else {
         alert("Phone & Address is Required");
         setloading(false);

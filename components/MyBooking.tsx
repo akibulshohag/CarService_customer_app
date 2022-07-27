@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { showMessage } from "react-native-flash-message";
 import { TouchableOpacity } from "react-native-gesture-handler";
+
 import BookingService from "../services/BookingService";
 
 const deviceWidth = Dimensions.get("window").width;
@@ -158,18 +159,18 @@ export default function TabOneScreen({ bookingList }: any) {
               TK {bookingList?.rent}
             </Text>
           </View>
-          {/* {bookingList?.bookingStatus == "Pending" ? (
-            <TouchableOpacity style={styles.loginBtn}>
-              {loading ? (
-                <ActivityIndicator size={"small"} color="#fff" />
-              ) : (
-                <Image
-                  style={{ width: 30, height: 25 }}
-                  source={require("../assets/fonts/editing.png")}
-                ></Image>
-              )}
+          {bookingList?.bookingSchedule?.length > 0 ? (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("BookingDetails", {
+                  bookingDetails: bookingList,
+                })
+              }
+              style={styles.loginBtn}
+            >
+              <Text style={{ color: "#004C3F", fontSize: 16 }}>Schedule</Text>
             </TouchableOpacity>
-          ) : null} */}
+          ) : null}
         </View>
       </TouchableOpacity>
     </>
