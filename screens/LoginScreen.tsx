@@ -15,7 +15,7 @@ import {
   Text,
   TextInput,
   useColorScheme,
-  View,
+  View
 } from "react-native";
 import { showMessage } from "react-native-flash-message";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -202,7 +202,7 @@ export default function LoginScreen() {
                   style={{ width: deviceWidth / 1.5 }}
                   onChangeText={setemail}
                   value={email}
-                  placeholder={isOtpLogin ? "Phone" : "Mail / Phone"}
+                  placeholder={isOtpLogin ? "Mail" : "Mail "}
                 />
               </View>
             )}
