@@ -49,7 +49,7 @@ export default function TabOneScreen() {
       >
         <Image
           style={styles.img1}
-          source={require("../assets/car/car4.png")}
+          source={require("../assets/car/car.png")}
         ></Image>
       </View>
     </TouchableOpacity>

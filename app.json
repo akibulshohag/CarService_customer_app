@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "airport_carservice",
+    "name": "Alvis Car",
     "slug": "airport_carservice",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -23,13 +25,18 @@
       "googleServicesFile": "./google-services.json",
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/playstore-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.akibul021.airport_carservice"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9baaa89c-2b8a-4deb-98ef-3cea964585b2"
+      }
     }
   }
 }

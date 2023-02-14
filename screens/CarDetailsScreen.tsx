@@ -119,13 +119,13 @@ export default function HomeScreen(props: any) {
                 >
                   <Image
                     style={styles.img1}
-                    source={require("../assets/car/car4.png")}
+                    source={require("../assets/car/car.png")}
                   ></Image>
                 </View>
                 <View style={styles.imgContainer}>
                   <Image
                     style={styles.img1}
-                    source={require("../assets/car/car4.png")}
+                    source={require("../assets/car/car.png")}
                   ></Image>
                 </View>
                 <View style={styles.imgContainer}>

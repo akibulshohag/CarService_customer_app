@@ -116,7 +116,7 @@ export default function HomeScreen() {
             <TouchableOpacity
               activeOpacity={0.3}
               style={styles.loginBtn1}
-              onPress={() => navigation.navigate("AvailableCar")}
+              // onPress={() => navigation.navigate("AvailableCar")}
             >
               <View>
                 <Text
