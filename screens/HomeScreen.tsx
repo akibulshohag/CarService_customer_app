@@ -52,7 +52,7 @@ export default function HomeScreen() {
               <Text
                 style={{
                   color: `${scheme === "dark" ? "#fff" : "#fff"}`,
-                  fontSize: 22,
+                  fontSize: 18,
                   fontWeight: "bold",
                   textAlign: "center",
                 }}

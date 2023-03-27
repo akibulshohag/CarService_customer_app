@@ -15,10 +15,10 @@ import {
   Text,
   TextInput,
   useColorScheme,
-  View
+  View,
+  TouchableOpacity
 } from "react-native";
 import { showMessage } from "react-native-flash-message";
-import { TouchableOpacity } from "react-native-gesture-handler";
 // import { SafeAreaView } from "react-native-safe-area-context";
 //services
 import RegisterService from "../services/RegisterService";

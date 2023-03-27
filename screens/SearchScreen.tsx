@@ -55,13 +55,13 @@ export default function UpdateProfile() {
   // console.log(".......", selectedFromDistrict);
 
   useEffect(() => {
-    SearchService.getCarList().then((res) => {
+    SearchService.getCarList1().then((res) => {
       setcarName(res?.data);
     });
   }, []);
 
   useEffect(() => {
-    SearchService.getLocation().then((res) => {
+    SearchService.getLocation1().then((res) => {
       setfromdistrict(res?.data);
       // let newArray = res?.data?.map((item: any) => {
       //   return { key: item?.districtId, value: item?.districtName };
@@ -71,7 +71,7 @@ export default function UpdateProfile() {
     });
   }, []);
   useEffect(() => {
-    SearchService.getCarSeat().then((res) => {
+    SearchService.getCarSeat1().then((res) => {
       setcarSeat(res?.data);
     });
   }, []);
@@ -138,7 +138,7 @@ export default function UpdateProfile() {
     // console.log(".........data", data);
 
     try {
-      let res = await SearchService.carFilter(data);
+      let res = await SearchService.carFilter1(data);
       // console.log(".......res", res);
       if (res?.data.length > 0) {
         navigation.navigate("AvailableCar", { carList: res?.data });

@@ -85,7 +85,7 @@ export default function HomeScreen(props: any) {
               style={{ flexDirection: "row", alignItems: "center" }}
             >
               <AntDesign name="logout" size={20} color="red" />
-              <Text
+              {/* <Text
                 style={{
                   fontSize: 16,
                   marginLeft: 5,
@@ -94,7 +94,7 @@ export default function HomeScreen(props: any) {
                 }}
               >
                 Logout
-              </Text>
+              </Text> */}
             </TouchableOpacity>
           </View>
         </View>

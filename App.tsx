@@ -91,6 +91,53 @@ export default function App() {
             component={UpdateProfile}
             options={{ header: () => null }}
           />
+          
+              <Stack.Screen
+                name="CarDetails"
+                component={CarDetails}
+                options={{ header: () => null }}
+              />
+              <Stack.Screen
+                name="Notification"
+                component={Notification}
+                options={{ header: () => null }}
+              />
+              <Stack.Screen
+                name="ConfirmOrder"
+                component={ConfirmOrder}
+                options={{ header: () => null }}
+              />
+              <Stack.Screen
+                name="Support"
+                component={Support}
+                options={{ header: () => null }}
+              />
+              <Stack.Screen
+                name="TermAndCondition"
+                component={TermAndCondition}
+                options={{ header: () => null }}
+              />
+              
+              <Stack.Screen
+                name="SearchCar"
+                component={SearchCar}
+                options={{ header: () => null }}
+              />
+              <Stack.Screen
+                name="BookSummary"
+                component={BookSummary}
+                options={{ header: () => null }}
+              />
+              <Stack.Screen
+                name="Booked"
+                component={Booked}
+                options={{ header: () => null }}
+              />
+              <Stack.Screen
+                name="BookingDetails"
+                component={BookingDetails}
+                options={{ header: () => null }}
+              />
         </Stack.Navigator>
       ) : (
         <>
